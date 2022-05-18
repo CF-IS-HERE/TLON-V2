@@ -1,6 +1,8 @@
 local Gamestate = require "data/libraries/hump.gamestate"
 menu = {}
 
+require('game')
+
 function menu:init()
 
     self.background = love.graphics.newImage('data/images/main_menu/menu_background.png')

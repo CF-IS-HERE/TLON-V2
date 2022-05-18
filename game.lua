@@ -1,9 +1,12 @@
 local Gamestate = require "data/libraries/hump.gamestate"
 
-local game = {}
+game = {}
 
-function game:load()
-
+function game:enter(previous)
+    --Debug if statement - Matthew
+    if Gamestate.current() == game then
+        print("Successfuly entered game.")
+    end
 end
 
 function game:update(dt)
