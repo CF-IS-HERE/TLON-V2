@@ -1,10 +1,10 @@
 local ClickableButtonSystem = Concord.system({
-    pool = {"hover", "scale", "position"}
+    pool = {"hover", "scale", "position", "callback"}
 })
 
 function ClickableButtonSystem:init()
     self.hover_sound = love.audio.newSource("assets/sounds/menu-move.mp3", "stream")
-    self.has_entered = false
+    self.is_entered = false
 end
 
 function ClickableButtonSystem:draw()
@@ -22,6 +22,12 @@ function ClickableButtonSystem:draw()
                 e.is_entered = true
                 love.audio.stop(self.hover_sound)
                 love.audio.play(self.hover_sound)
+                e.is_pressed = love.mouse.isDown(1)
+            end
+            if e.is_pressed then
+                e.is_pressed = love.mouse.isDown(1)
+            elseif love.mouse.isDown(1) then
+                e.callback.fn()
             end
         else
             love.graphics.draw(e.hover.img_idle, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)

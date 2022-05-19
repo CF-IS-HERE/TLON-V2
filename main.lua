@@ -15,6 +15,7 @@ Concord.utils.loadNamespace("src/states", State)
 
 function love.load()
     love.mouse.setVisible(false)
+    love.audio.setVolume(0.1)
     Gamestate.registerEvents()
     Gamestate.switch(State.MainMenu)
 end
