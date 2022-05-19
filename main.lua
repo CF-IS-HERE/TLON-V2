@@ -8,12 +8,13 @@ Concord.utils.loadNamespace("src/systems", Systems)
 
 -- global game settings
 love.graphics.setDefaultFilter( "nearest" )
-love.mouse.isVisible = false
 
+-- game states like MainMenu, etc.
 State = {}
 Concord.utils.loadNamespace("src/states", State)
 
 function love.load()
+    love.mouse.setVisible(false)
     Gamestate.registerEvents()
     Gamestate.switch(State.MainMenu)
 end
