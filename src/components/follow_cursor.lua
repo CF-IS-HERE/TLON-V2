@@ -1,0 +1,1 @@
+return Concord.component("follow_cursor")
