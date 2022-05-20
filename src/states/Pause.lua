@@ -9,7 +9,7 @@ end
 
 function Pause:update(dt)
     print("In Pause")
-    -- Debug function
+    -- Debug function noy final solution - Matthew
     function love.keypressed(key)
         if key == "q" then
             Gamestate.switch(game)
