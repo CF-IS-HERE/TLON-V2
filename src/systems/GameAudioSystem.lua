@@ -1,41 +1,41 @@
-local AudioSys = Concord.system({})
+local GameAudioSystem = Concord.system({})
 
-function AudioSys:init()
-    self.music = love.audio.newSource('assests/sounds/music/music.wav')
-    self.music:setVolume(0.1)
+function GameAudioSystem:init()
+    self.music = love.audio.newSource("assets/sounds/music/music.wav", "static")
+    self.music:setVolume(1)
     self.music:setLooping(true)
     self.music:play()
 end
 
-function AudioSys:sysCleanUp()
+function GameAudioSystem:sysCleanUp()
     self.music:stop()
 end
 
-function AudioSys:takeDamage(target, damage)
+function GameAudioSystem:takeDamage(target, damage)
     if target.type == "enemy" then
-        local sound = love.audio.newSource('assests/sounds/SFX/enemyHit.wav')
-        sound:setVolume(0.1)
+        local sound = love.audio.newSource('assets/sounds/SFX/enemyHit.wav', "static")
+        sound:setVolume(1)
         sound:play()
     end
 end
 
-function AudioSys:healthZero(target)
+function GameAudioSystem:healthZero(target)
     if target.type == "enemy" then
-        local sound = love.sound.newSource('assests/sounds/SFX/enemyDie.wav')
-        sound:setVolume(0.1)
+        local sound = love.audio.newSource('assets/sounds/SFX/enemyDie.wav', "static")
+        sound:setVolume(1)
         sound:play()
     end
     if target.type == "player" then
-        local sound = love.audio.newSource('assests/sounds/SFX/playerDie.wav')
-        sound:setVolume(0.1)
+        local sound = love.audio.newSource('assets/sounds/SFX/playerDie.wav', "static")
+        sound:setVolume(1)
         sound:play()
     end
 end
 
-function AudioSys:shoot()
-    local sound = love.audio.newSource('assests/sounds/SFX/shoot.wav')
-    sound:setVolume(0.1)
+function GameAudioSystem:shoot()
+    local sound = love.audio.newSource('assets/sounds/SFX/shoot.wav', "static")
+    sound:setVolume(1)
     sound:play()
 end
 
-return AudioSys
+return GameAudioSystem
