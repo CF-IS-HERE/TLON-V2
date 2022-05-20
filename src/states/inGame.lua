@@ -9,7 +9,7 @@ function inGame:enter(previous)
     end
 
     self.world = Concord.world()
-    self.world:addSystems(Systems.PlayerControlledSystem, Systems.StaticImageSystem, Systems.KeyInputSystem)
+    self.world:addSystems(Systems.PlayerControlledSystem, Systems.StaticImageSystem, Systems.KeyInputSystem, Systems.GameAudioSystem)
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
     local background_scale_x = love.graphics.getWidth() / background_img:getWidth()
