@@ -1,7 +1,8 @@
 Gamestate = require "lib/hump.gamestate"
+Anim8 = require "lib/anim8.anim8"
 
 -- set up ECS globals
-Concord = require 'lib/concord'
+Concord = require "lib/concord"
 Systems = {}
 Concord.utils.loadNamespace("src/components")
 Concord.utils.loadNamespace("src/systems", Systems)
