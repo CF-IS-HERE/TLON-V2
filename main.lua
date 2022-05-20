@@ -24,8 +24,8 @@ function love.update(dt)
 
     --Debug Function not final solution - Matthew
     function love.keypressed(key)
-        if key == "space" and Gamestate.current() ~= State.Game then
-            Gamestate.switch(State.Game)
+        if key == "space" and Gamestate.current() ~= State.inGame then
+            Gamestate.switch(State.inGame)
             -- Debug Print - Matthew
             print("The Spacebar key was pressed. Gamestate should switch to Game.")
         end
