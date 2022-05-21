@@ -7,7 +7,6 @@ TextUtils = require "src/utils/TextUtils"
 
 -- set up ECS globals
 Concord = require 'lib/concord'
-Vector = require 'lib/hump.vector'
 
 Systems = {}
 Concord.utils.loadNamespace("src/components")
