@@ -1,5 +1,6 @@
 Gamestate = require "lib/hump.gamestate"
 Anim8 = require "lib/anim8.anim8"
+Flux = require "lib/flux.flux"
 
 -- set up ECS globals
 Concord = require "lib/concord"
@@ -22,7 +23,7 @@ function love.load()
 end
 
 function love.update(dt)
-
+    Flux.update(dt)
     --Debug Function not final solution - Matthew
     function love.keypressed(key)
         if key == "space" and Gamestate.current() ~= State.inGame then

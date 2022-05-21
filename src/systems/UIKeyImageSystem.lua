@@ -12,8 +12,10 @@ function UIKeyImageSystem:draw()
             love.graphics.draw(e.image_key.image_active, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
             if not e.active then
                 e.active = true
-                love.audio.stop(self.sound_pressed)
-                love.audio.play(self.sound_pressed)
+                if not e.image_key.silent then
+                    love.audio.stop(self.sound_pressed)
+                    love.audio.play(self.sound_pressed)
+                end
             end
         else
             e.active = false
