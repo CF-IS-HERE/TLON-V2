@@ -23,7 +23,7 @@ function Instructions:init()
         :give("button", {
             image_idle = love.graphics.newImage("assets/images/manual/back.png"),
             image_hover = love.graphics.newImage("assets/images/manual/back_hover.png"),
-            on_click = function() Gamestate.switch(State.MainMenu) end
+            on_click = function() Gamestate.pop(Gamestate.Pause) end
         })
         :give("scale", 4)
         :give("position", 8, 55)
@@ -113,7 +113,7 @@ function Instructions:init()
         :give("image", love.graphics.newImage("assets/images/mouse/pointer.png"))
         :give("scale", 3)
         :give("position")
-        :give("follow_cursor")
+        :give("follow_cursor", -5, -5)
     
     self.updateButtonStates(self)
 end

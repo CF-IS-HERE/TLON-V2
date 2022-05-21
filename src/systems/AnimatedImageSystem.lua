@@ -11,6 +11,8 @@ function AnimatedImageSystem:update(dt)
             e.grid = Anim8.newGrid(frame_width, e.image.img:getHeight(), e.image.img:getWidth(), e.image.img:getHeight())
             local loop_fn = function(anim, loops)
                 if not e.animation.looped then
+                    e.animation.playing = false
+                    e.animation.on_complete()
                     anim:pauseAtEnd()
                 end
             end

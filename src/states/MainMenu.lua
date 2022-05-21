@@ -38,7 +38,7 @@ function MainMenu:init()
         :give("button", {
             image_idle = love.graphics.newImage("assets/images/main_menu/manual.png"),
             image_hover = love.graphics.newImage("assets/images/main_menu/manual_hover.png"),
-            on_click = function() Gamestate.switch(State.Instructions) end
+            on_click = function() Gamestate.push(State.Instructions) end
         })
         :give("scale", 4)
         :give("position", 204, 500)
@@ -73,7 +73,7 @@ function MainMenu:init()
         :give("image", love.graphics.newImage("assets/images/mouse/pointer.png"))
         :give("scale", 3)
         :give("position")
-        :give("follow_cursor")
+        :give("follow_cursor", -5, -5)
 end
 
 function MainMenu:update(dt)
