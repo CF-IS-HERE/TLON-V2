@@ -1,1 +1,0 @@
-return Concord.component("clearDirectionIntent")

@@ -1,3 +1,3 @@
-return Concord.component("sprite", function(self, value)
-    self.value = value
+return Concord.component("sprite", function(self, sprite)
+    self.sprite = sprite
 end)

@@ -4,7 +4,6 @@ Flux = require "lib/flux.flux"
 
 -- set up ECS globals
 Concord = require 'lib/concord'
-Vector = require 'lib/brinevector'
 
 Systems = {}
 Concord.utils.loadNamespace("src/components")
