@@ -1,9 +1,11 @@
 local SpriteSystem = Concord.system({
-    pool = {"position", "scale", "image"}
+    pool = {"position", "scale", "sprite"}
 })
 
 function SpriteSystem:draw() 
-    for _, e in ipairs(pool) do
-        love.graphics.draw(e.image.img, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+    for _, e in ipairs(self.pool) do
+        love.graphics.draw(e.sprite.value, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
     end
 end
+
+return SpriteSystem
