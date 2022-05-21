@@ -11,26 +11,25 @@ function MainMenu:init()
         :give("animation", {
             total_frames = 4,
             speed = 0.2,
-            is_playing = false
+            playing = false
         })
         :give("image", background_img)
         :give("position")
         :give("scale", background_scale_x * 4, background_scale_y)
-    
     Concord.entity(self.world)
         :give("button", {
             image_idle = love.graphics.newImage("assets/images/main_menu/play.png"),
             image_hover = love.graphics.newImage("assets/images/main_menu/play_hover.png"),
-            on_click = function() Gamestate.switch(State.Game) end,
+            on_click = function() Gamestate.switch(State.inGame) end,
             on_mouse_enter = function()
                 self.background.anim:gotoFrame(1)
-                self.background.animation.is_reverse = false
-                self.background.animation.is_playing = true
+                self.background.animation.reversed = false
+                self.background.animation.playing = true
             end,
             on_mouse_leave = function()
                 self.background.anim_reverse:gotoFrame(1)
-                self.background.animation.is_reverse = true
-                self.background.animation.is_playing = true
+                self.background.animation.reversed = true
+                self.background.animation.playing = true
             end
         })
         :give("scale", 4)
@@ -72,7 +71,7 @@ function MainMenu:init()
     self.overlay:addSystems(Systems.StaticImageSystem, Systems.MouseCursorSystem)
     Concord.entity(self.overlay)
         :give("image", love.graphics.newImage("assets/images/mouse/pointer.png"))
-        :give("scale", 3, 3)
+        :give("scale", 3)
         :give("position")
         :give("follow_cursor")
 end
