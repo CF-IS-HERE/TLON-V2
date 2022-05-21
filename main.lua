@@ -32,8 +32,8 @@ function love.update(dt)
             print("The Spacebar key was pressed. Gamestate should switch to Game.")
         end
 
-        if key == "p" and Gamestate.current() ~= State.MainMenu then
-            Gamestate.switch(State.Pause)
+        if key == "p" and Gamestate.current() ~= State.Pause then
+            Gamestate.push(State.Pause)
             -- Debug Print - Matthew
             print("The P key was pressed. Gamestate should switch to Pause.")
     

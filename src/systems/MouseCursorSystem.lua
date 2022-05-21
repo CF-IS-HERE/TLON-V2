@@ -4,8 +4,8 @@ local MouseCursorSystem = Concord.system({
 
 function MouseCursorSystem:update()
     for _, e in ipairs(self.pool) do
-        e.position.x = love.mouse.getX() - 5
-        e.position.y = love.mouse.getY() - 5
+        e.position.x = love.mouse.getX() + e.follow_cursor.offset_x
+        e.position.y = love.mouse.getY() + e.follow_cursor.offset_y
     end
 end
 

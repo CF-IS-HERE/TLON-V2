@@ -7,4 +7,5 @@ return Concord.component("animation", function(self, options)
         self.playing = true
     end
     self.reversed = options.reversed or false
+    self.on_complete = options.on_complete or function() end
 end)
