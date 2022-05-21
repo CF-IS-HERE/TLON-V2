@@ -1,10 +1,10 @@
-local component = Concord.component("directionIntent", function(self, x, y)
+local component = Concord.component("pos", function(self, x, y)
     self.vec = Vector(x, y)
 end)
 
 function component:serialize()
     local x,y = Vector.split(self.vec)
-    return { x = x, y = y }
+    return { x = x, y = y}
 end
 
 function component:deserialize(data)
