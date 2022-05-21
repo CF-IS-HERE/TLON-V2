@@ -1,8 +1,14 @@
 Gamestate = require "lib/hump.gamestate"
+Anim8 = require "lib/anim8.anim8"
+Flux = require "lib/flux.flux"
 
 -- set up ECS globals
+<<<<<<< HEAD
 Concord = require 'lib/concord'
 Vector = require 'lib/brinevector/brinevector'
+=======
+Concord = require "lib/concord"
+>>>>>>> 266d4d48733b89a16b496b4396d6a8043da7f590
 Systems = {}
 Concord.utils.loadNamespace("src/components")
 Concord.utils.loadNamespace("src/systems", Systems)
@@ -21,7 +27,7 @@ function love.load()
 end
 
 function love.update(dt)
-
+    Flux.update(dt)
     --Debug Function not final solution - Matthew
     function love.keypressed(key)
         if key == "space" and Gamestate.current() ~= State.inGame then
