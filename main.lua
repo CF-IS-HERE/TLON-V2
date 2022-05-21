@@ -3,12 +3,9 @@ Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
 -- set up ECS globals
-<<<<<<< HEAD
 Concord = require 'lib/concord'
-Vector = require 'lib/hump.vector
-=======
-Concord = require "lib/concord"
->>>>>>> 266d4d48733b89a16b496b4396d6a8043da7f590
+Vector = require 'lib/hump.vector'
+
 Systems = {}
 Concord.utils.loadNamespace("src/components")
 Concord.utils.loadNamespace("src/systems", Systems)
