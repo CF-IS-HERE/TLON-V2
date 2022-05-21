@@ -1,4 +1,4 @@
-local component = Concord.component("collisionclass", function(self, value)
+return Concord.component("collisionclass", function(self, value)
     self.value = value
 end)
 
