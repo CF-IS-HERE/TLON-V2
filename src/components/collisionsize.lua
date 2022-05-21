@@ -1,4 +1,4 @@
-local component = Concord.component("collisionsize", function(self, w, h)
+return Concord.component("collisionsize", function(self, w, h)
     self.w = w
     self.h = h
 end)

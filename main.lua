@@ -3,7 +3,9 @@ Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
 -- set up ECS globals
-Concord = require "lib/concord"
+Concord = require 'lib/concord'
+Vector = require 'lib/hump.vector'
+
 Systems = {}
 Concord.utils.loadNamespace("src/components")
 Concord.utils.loadNamespace("src/systems", Systems)
@@ -17,7 +19,6 @@ Concord.utils.loadNamespace("src/states", State)
 
 function love.load()
     love.mouse.setVisible(false)
-    love.audio.setVolume(0.1)
     Gamestate.registerEvents()
     Gamestate.switch(State.MainMenu)
 end
