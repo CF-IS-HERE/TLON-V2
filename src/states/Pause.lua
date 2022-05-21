@@ -2,6 +2,7 @@ local Pause = {}
 
 function Pause:enter()
     if self.background.anim then
+        -- pause animation needs to be reset in case we were paused previously
         self.background.anim:gotoFrame(1)
         self.background.animation.reversed = false
         self.background.animation.playing = true

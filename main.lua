@@ -2,6 +2,9 @@ Gamestate = require "lib/hump.gamestate"
 Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
+ColorUtils = require "src/utils/ColorUtils"
+TextUtils = require "src/utils/TextUtils"
+
 -- set up ECS globals
 Concord = require 'lib/concord'
 
@@ -36,7 +39,10 @@ function love.update(dt)
             Gamestate.push(State.Pause)
             -- Debug Print - Matthew
             print("The P key was pressed. Gamestate should switch to Pause.")
-    
+        end
+
+        if key == "delete" and Gamestate.current ~= State.Death then
+            Gamestate.switch(State.Death)
         end
     end
 end
