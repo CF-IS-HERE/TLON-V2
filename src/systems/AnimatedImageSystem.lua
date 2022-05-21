@@ -33,7 +33,9 @@ end
 function AnimatedImageSystem:draw()
     for _, e in ipairs(self.pool) do
         local anim = e.animation.reversed and e.anim_reverse or e.anim
-        anim:draw(e.image.img, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+        if e.image.visible then
+            anim:draw(e.image.img, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+        end
     end
 end
 
