@@ -49,6 +49,11 @@ function InGame:init()
         :give("scale", 1, 1)
         :give("speed", 130)
 
+    self.overlay = Concord.world()
+    self.overlay:addSystems(
+        Systems.MouseCursorSystem,
+        Systems.StaticImageSystem
+    )
 
 end
 
