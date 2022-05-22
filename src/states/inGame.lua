@@ -31,11 +31,11 @@ function InGame:init()
     Concord.entity(self.world) 
         :give("sprite", {
             image = love.graphics.newImage('assets/images/player.png'),
-            layer = self.game_layer
+            layer = self.game_layer,
+            total_frames = 5
         })
         :give("player_controlled")
         :give("position", player.x, player.y)
-        :give("velocity")
         :give("scale", 1, 1)
         :give("speed", 200)
 
