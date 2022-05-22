@@ -20,26 +20,18 @@ end
 function KeyInputSystem:update(dt)
   if checkInput('moveDown') then
     self:getWorld():emit('moveDown')
-    --Debug Print
-    print("Down was Pressed!")
   end
 
   if checkInput('moveUp') then
     self:getWorld():emit('moveUp')
-    --Debug Print
-    print("Up was Pressed!")
   end
 
   if checkInput('moveRight') then
     self:getWorld():emit('moveRight')
-    --Debug Print
-    print("Right was Pressed!")
   end
 
   if checkInput('moveLeft') then
     self:getWorld():emit('moveLeft')
-    --Debug Print
-    print("Left was Pressed!")
   end
 
   if checkInput('shoot') then
