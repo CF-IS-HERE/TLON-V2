@@ -4,6 +4,7 @@ local UIKeyImageSystem = Concord.system({
 
 function UIKeyImageSystem:init(world)
     self.sound_pressed = love.audio.newSource("assets/sounds/menu-accept.mp3", "stream")
+    self.sound_pressed:setVolume(0.1)
 end
 
 function UIKeyImageSystem:draw()

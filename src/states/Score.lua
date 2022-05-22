@@ -24,9 +24,12 @@ function Score:init()
     
     self.font = love.graphics.newFont("assets/fonts/nokia.ttf", 20)
     self.world = Concord.world()
-    self.world:addSystems(Systems.StaticImageSystem, Systems.UIButtonSystem, Systems.UILabelSystem)
+    self.world:addSystems(Systems.SpriteSystem, Systems.UIButtonSystem, Systems.UILabelSystem)
     Concord.entity(self.world)
-        :give("image", background_img, false)
+        :give("sprite", {
+            image = background_img,
+            visible = false
+        })
         :give("position")
         :give("scale", background_scale_x, background_scale_y)
 
@@ -44,7 +47,7 @@ function Score:init()
             image_hover = love.graphics.newImage("assets/images/deathscreen/again_hover.png"),
             on_click = function()
                 -- todo: transition to game reset state instead
-                Gamestate.switch(State.inGame)
+                Gamestate.switch(State.InGame)
             end
         })
         :give("scale", 4)
@@ -61,9 +64,9 @@ function Score:init()
         :give("position", 540, 464)
 
     self.overlay = Concord.world()
-    self.overlay:addSystems(Systems.StaticImageSystem, Systems.MouseCursorSystem)
+    self.overlay:addSystems(Systems.SpriteSystem, Systems.MouseCursorSystem)
     Concord.entity(self.overlay)
-        :give("image", love.graphics.newImage("assets/images/mouse/target.png"))
+        :give("sprite", {image = love.graphics.newImage("assets/images/mouse/target.png")})
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -20)

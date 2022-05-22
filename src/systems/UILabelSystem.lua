@@ -12,7 +12,7 @@ function UILabelSystem:draw()
         love.graphics.setFont(e.label.font)
         if e.label.border then
             love.graphics.setLineWidth(4)
-            -- love doesn't have a lot of tools to measure text, do a lazy approximation instead
+            -- love doesn't have a lot of tools to measure text, do a dirty approximation instead
             -- get the list of substrings (\n), find the longest one for the width and use the # of substrings for height
             local substrings = TextUtils.split(e.label.text, "\n")
             local max_chars = #substrings[1]
