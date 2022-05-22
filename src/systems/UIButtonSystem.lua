@@ -4,7 +4,9 @@ local UIButtonSystem = Concord.system({
 
 function UIButtonSystem:init(world)
     self.sound_click = love.audio.newSource("assets/sounds/menu-accept.mp3", "stream")
+    self.sound_click:setVolume(0.1)
     self.sound_hover = love.audio.newSource("assets/sounds/menu-move.mp3", "stream")
+    self.sound_hover:setVolume(0.1)
 end
 
 function UIButtonSystem:draw()

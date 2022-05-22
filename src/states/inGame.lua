@@ -42,6 +42,7 @@ function inGame:enter(previous)
         :give("sprite", sprites.player)
         :give("player_controlled")
         :give("position", player.x, player.y)
+        :give("velocity")
         :give("scale", 1, 1)
         :give("speed", 400)
 

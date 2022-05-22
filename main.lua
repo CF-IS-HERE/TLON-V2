@@ -1,4 +1,5 @@
 Gamestate = require "lib/hump.gamestate"
+Vector = require "lib/hump.vector"
 Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
