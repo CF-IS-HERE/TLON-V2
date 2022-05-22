@@ -52,7 +52,7 @@ function InGame:init()
     self.overlay = Concord.world()
     self.overlay:addSystems(
         Systems.MouseCursorSystem,
-        Systems.StaticImageSystem
+        Systems.SpriteSystem
     )
 
 end
