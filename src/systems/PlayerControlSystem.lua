@@ -1,5 +1,5 @@
 local PlayerControlSystem = Concord.system({
-    pool = {"player_controlled", "speed", "position"}
+    pool = {"player_controlled", "speed", "position", "velocity"}
 })
 
 function PlayerControlSystem:update(dt)
@@ -8,13 +8,11 @@ function PlayerControlSystem:update(dt)
         local right = love.keyboard.isDown("d") and 1 or 0
         local up = love.keyboard.isDown("w") and 1 or 0
         local down = love.keyboard.isDown("s") and 1 or 0
-        local input_vector = Vector(right - left, down - up):normalized()
-        local velocity = input_vector * entity.speed.value * dt
-        entity.position.x = MathUtils.clamp(entity.position.x + velocity.x, 0, 200)
-        entity.position.y = MathUtils.clamp(entity.position.y + velocity.y, 0, 150)
+        entity.velocity.x = MathUtils.lerp(entity.velocity.x, (right - left) * entity.speed.value, dt * 5)
+        entity.velocity.y = MathUtils.lerp(entity.velocity.y, (down - up) * entity.speed.value, dt * 5)
+        entity.position.x = MathUtils.clamp(entity.position.x + entity.velocity.x, 0, 190)
+        entity.position.y = MathUtils.clamp(entity.position.y + entity.velocity.y, 0, 140)
     end
 end
-
-
 
 return PlayerControlSystem

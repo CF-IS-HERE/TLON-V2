@@ -8,7 +8,8 @@ function InGame:init()
         Systems.SpriteSystem, 
         Systems.GameAudioSystem,
         Systems.PlayerControlSystem, 
-        Systems.AiControlSystem)
+        Systems.AiControlSystem,
+        Systems.WeaponSystem)
     self.game_layer = love.graphics.newCanvas(200, 150)
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
@@ -36,8 +37,14 @@ function InGame:init()
         })
         :give("player_controlled")
         :give("position", player.x, player.y)
-        :give("scale", 1, 1)
-        :give("speed", 200)
+        :give("velocity")
+        :give("scale", 1)
+        :give("speed", 2)
+        :give("weapon", {
+            image = love.graphics.newImage("assets/images/shooter.png"),
+            latency = 0.2,
+            on_shoot = function() print("shooting") end
+        })
 
     Concord.entity(self.world)
         :give("sprite", {
@@ -46,19 +53,25 @@ function InGame:init()
         })
         :give("ai_controlled")
         :give("position", ai.x, ai.y)
-        :give("scale", 1, 1)
-        :give("speed", 130)
+        :give("scale", 1)
+        :give("speed", 50)
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
         Systems.MouseCursorSystem,
         Systems.SpriteSystem
     )
+    Concord.entity(self.overlay)
+        :give("sprite", {image = love.graphics.newImage("assets/images/mouse/target.png")})
+        :give("scale", 3)
+        :give("position")
+        :give("follow_cursor", -5, -5)
 
 end
 
 function InGame:update(dt)
     self.world:emit("update", dt)
+    self.overlay:emit("update", dt)
 end
 
 function InGame:draw()
@@ -68,6 +81,7 @@ function InGame:draw()
     love.graphics.setCanvas()
     self.world:emit("draw")
     love.graphics.draw(self.game_layer, 0, 0, 0, 4, 4)
+    self.overlay:emit("draw")
 end
 
 return InGame
