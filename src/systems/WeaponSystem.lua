@@ -17,8 +17,8 @@ end
 
 function WeaponSystem:draw()
     for _, e in ipairs(self.pool) do
-        local offset = Vector(2, -4)
-        local center = Vector(e.position.x - 5, e.position.y + 9)
+        local offset = Vector(2, -4) -- weapon offset, might be better within the component itself?
+        local center = Vector(e.position.x - 5, e.position.y + 9) -- center of player, used for rotation
         local rotation = Vector(love.mouse.getX() - center.x * 4, love.mouse.getY() - center.y * 4)
         local angle = rotation:angleTo()
         offset:rotateInplace(angle)

@@ -1,4 +1,5 @@
 local InGame = {}
+local show_hitbox = true
 
 world = nil
 
@@ -9,6 +10,7 @@ function InGame:init()
         Systems.GameAudioSystem,
         Systems.PlayerControlSystem, 
         Systems.AiControlSystem,
+        Systems.CollisionSystem,
         Systems.WeaponSystem)
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
 
@@ -45,15 +47,33 @@ function InGame:init()
             latency = 0.2,
             on_shoot = function() print("shooting") end
         })
+        :give("hitbox", {
+            offset_x = -8,
+            offset_y = 4,
+            width = 6,
+            height = 5,
+            layer = "player",
+            on_entered = function() print("entered") end,
+            rendered = show_hitbox
+        })
 
-    -- Concord.entity(self.world)
-    --     :give("sprite", {
-    --         image = love.graphics.newImage('assets/images/lemon.png'),
-    --     })
-    --     :give("layer", self.scaled_canvas)
-    --     :give("ai_controlled")
-    --     :give("position", ai.x, ai.y)
-    --     :give("speed", 50)
+    Concord.entity(self.world)
+        :give("sprite", {
+            image = love.graphics.newImage('assets/images/lemon.png'),
+        })
+        :give("layer", self.scaled_canvas)
+        :give("ai_controlled")
+        :give("position", ai.x, ai.y)
+        :give("speed", 50)
+        :give("hurtbox", {
+            offset_x = 5,
+            offset_y = 3,
+            width = 6,
+            height = 5,
+            layer = "player",
+            on_enter = function() print("enter") end,
+            rendered = show_hitbox
+        })        
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
