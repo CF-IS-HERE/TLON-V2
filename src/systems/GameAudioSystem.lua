@@ -2,7 +2,7 @@ local GameAudioSystem = Concord.system({})
 
 function GameAudioSystem:init()
     self.music = love.audio.newSource("assets/sounds/music/music.wav", "static")
-    self.music:setVolume(0.1)
+    self.music:setVolume(0.01) -- set this back to 0.1 later
     self.music:setLooping(true)
     self.music:play()
 end

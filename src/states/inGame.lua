@@ -10,7 +10,7 @@ function InGame:init()
         Systems.PlayerControlSystem, 
         Systems.AiControlSystem,
         Systems.WeaponSystem)
-    self.game_layer = love.graphics.newCanvas(200, 150)
+    self.scaled_canvas = love.graphics.newCanvas(200, 150)
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
     local background_scale_x = love.graphics.getWidth() / background_img:getWidth()
@@ -32,13 +32,13 @@ function InGame:init()
     Concord.entity(self.world) 
         :give("sprite", {
             image = love.graphics.newImage('assets/images/player.png'),
-            layer = self.game_layer,
-            total_frames = 5
+            total_frames = 5,
+            offset = Vector(5, 0)
         })
+        :give("layer", self.scaled_canvas)
         :give("player_controlled")
         :give("position", player.x, player.y)
         :give("velocity")
-        :give("scale", 1)
         :give("speed", 2)
         :give("weapon", {
             image = love.graphics.newImage("assets/images/shooter.png"),
@@ -46,15 +46,14 @@ function InGame:init()
             on_shoot = function() print("shooting") end
         })
 
-    Concord.entity(self.world)
-        :give("sprite", {
-            image = love.graphics.newImage('assets/images/lemon.png'),
-            layer = self.game_layer
-        })
-        :give("ai_controlled")
-        :give("position", ai.x, ai.y)
-        :give("scale", 1)
-        :give("speed", 50)
+    -- Concord.entity(self.world)
+    --     :give("sprite", {
+    --         image = love.graphics.newImage('assets/images/lemon.png'),
+    --     })
+    --     :give("layer", self.scaled_canvas)
+    --     :give("ai_controlled")
+    --     :give("position", ai.x, ai.y)
+    --     :give("speed", 50)
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -76,11 +75,11 @@ end
 
 function InGame:draw()
     -- clean canvas before drawing on it
-    love.graphics.setCanvas(self.game_layer)
+    love.graphics.setCanvas(self.scaled_canvas)
     love.graphics.clear()
     love.graphics.setCanvas()
     self.world:emit("draw")
-    love.graphics.draw(self.game_layer, 0, 0, 0, 4, 4)
+    love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
     self.overlay:emit("draw")
 end
 
