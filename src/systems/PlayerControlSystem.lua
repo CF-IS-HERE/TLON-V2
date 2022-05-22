@@ -11,20 +11,8 @@ function PlayerControlSystem:update(dt)
         local input_vector = Vector(right - left, down - up):normalized()
         entity.velocity.x = input_vector.x * dt * entity.speed.value
         entity.velocity.y = input_vector.y * dt * entity.speed.value
-        entity.position.x = entity.position.x + entity.velocity.x
-        entity.position.y = entity.position.y + entity.velocity.y
-        -- if love.keyboard.isDown("d") then 
-        --     entity.position.x = entity.position.x + entity.speed.value * dt
-        -- end
-        -- if love.keyboard.isDown("a") then
-        --     entity.position.x = entity.position.x - entity.speed.value * dt
-        -- end
-        -- if love.keyboard.isDown("w") then
-        --     entity.position.y = entity.position.y - entity.speed.value * dt
-        -- end
-        -- if love.keyboard.isDown("s") then
-        --     entity.position.y = entity.position.y + entity.speed.value * dt
-        -- end
+        entity.position.x = MathUtils.clamp(entity.position.x + entity.velocity.x, 0, 200)
+        entity.position.y = MathUtils.clamp(entity.position.y + entity.velocity.y, 0, 150)
     end
 end
 

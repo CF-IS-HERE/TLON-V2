@@ -1,14 +1,14 @@
 -- system that supports animation for a horizontal spritesheet
 
-local AnimatedImageSystem = Concord.system({
-    pool = {"animation", "image", "position", "scale"}
+local AnimatedSpriteSystem = Concord.system({
+    pool = {"animation", "sprite", "position", "scale"}
 })
 
-function AnimatedImageSystem:update(dt)
+function AnimatedSpriteSystem:update(dt)
     for _, e in ipairs(self.pool) do
         if not e.anim then
-            local frame_width = e.image.img:getWidth() / e.animation.total_frames
-            e.grid = Anim8.newGrid(frame_width, e.image.img:getHeight(), e.image.img:getWidth(), e.image.img:getHeight())
+            local frame_width = e.sprite.image:getWidth() / e.animation.total_frames
+            e.grid = Anim8.newGrid(frame_width, e.sprite.image:getHeight(), e.sprite.image:getWidth(), e.sprite.image:getHeight())
             local loop_fn = function(anim, loops)
                 if not e.animation.looped then
                     e.animation.playing = false
@@ -30,13 +30,13 @@ function AnimatedImageSystem:update(dt)
     end
 end
 
-function AnimatedImageSystem:draw()
+function AnimatedSpriteSystem:draw()
     for _, e in ipairs(self.pool) do
         local anim = e.animation.reversed and e.anim_reverse or e.anim
-        if e.image.visible then
-            anim:draw(e.image.img, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+        if e.sprite.visible then
+            anim:draw(e.sprite.image, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
         end
     end
 end
 
-return AnimatedImageSystem
+return AnimatedSpriteSystem

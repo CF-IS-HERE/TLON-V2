@@ -6,21 +6,21 @@ function MainMenu:init()
     local background_scale_y = love.graphics.getHeight() / background_img:getHeight()
 
     self.world = Concord.world()
-    self.world:addSystems(Systems.AnimatedImageSystem, Systems.UIButtonSystem)
+    self.world:addSystems(Systems.AnimatedSpriteSystem, Systems.UIButtonSystem)
     self.background = Concord.entity(self.world)
         :give("animation", {
             total_frames = 4,
             speed = 0.2,
             playing = false
         })
-        :give("image", background_img)
+        :give("sprite", {image = background_img})
         :give("position")
         :give("scale", background_scale_x * 4, background_scale_y)
     Concord.entity(self.world)
         :give("button", {
             image_idle = love.graphics.newImage("assets/images/main_menu/play.png"),
             image_hover = love.graphics.newImage("assets/images/main_menu/play_hover.png"),
-            on_click = function() Gamestate.switch(State.inGame) end,
+            on_click = function() Gamestate.switch(State.InGame) end,
             on_mouse_enter = function()
                 self.background.anim:gotoFrame(1)
                 self.background.animation.reversed = false
@@ -68,9 +68,9 @@ function MainMenu:init()
         :give("position", 700, 500)
     
     self.overlay = Concord.world()
-    self.overlay:addSystems(Systems.StaticImageSystem, Systems.MouseCursorSystem)
+    self.overlay:addSystems(Systems.SpriteSystem, Systems.MouseCursorSystem)
     Concord.entity(self.overlay)
-        :give("image", love.graphics.newImage("assets/images/mouse/pointer.png"))
+        :give("sprite", {image = love.graphics.newImage("assets/images/mouse/pointer.png")})
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -5, -5)

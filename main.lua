@@ -4,6 +4,7 @@ Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
 ColorUtils = require "src/utils/ColorUtils"
+MathUtils = require "src/utils/MathUtils"
 TextUtils = require "src/utils/TextUtils"
 
 -- set up ECS globals
@@ -30,8 +31,8 @@ function love.update(dt)
     Flux.update(dt)
     --Debug Function not final solution - Matthew
     function love.keypressed(key)
-        if key == "space" and Gamestate.current() ~= State.inGame then
-            Gamestate.switch(State.inGame)
+        if key == "space" and Gamestate.current() ~= State.InGame then
+            Gamestate.switch(State.InGame)
             -- Debug Print - Matthew
             print("The Spacebar key was pressed. Gamestate should switch to Game.")
         end

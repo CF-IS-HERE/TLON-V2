@@ -15,7 +15,7 @@ function Death:init()
     local animation_img_scale_y = love.graphics.getHeight() / animation_img:getHeight()
     
     self.world = Concord.world()
-    self.world:addSystems(Systems.AnimatedImageSystem)
+    self.world:addSystems(Systems.AnimatedSpriteSystem)
     self.death_animation = Concord.entity(self.world)
         :give("animation", {
             total_frames = 15,
@@ -25,7 +25,7 @@ function Death:init()
                 Gamestate.switch(State.Score)
             end
         })
-        :give("image", animation_img)
+        :give("sprite", {image = animation_img})
         :give("position")
         :give("scale", animation_img_scale_x * 15, animation_img_scale_y)
 end
