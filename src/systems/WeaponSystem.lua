@@ -4,7 +4,6 @@ local WeaponSystem = Concord.system({
 
 function WeaponSystem:update(dt)
     for _, e in ipairs(self.pool) do
-        Timer.update(dt)
         if e.weapon.can_shoot and love.mouse.isDown(1) then
             e.weapon.on_shoot()
             e.weapon.can_shoot = false

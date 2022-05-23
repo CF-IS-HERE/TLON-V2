@@ -1,5 +1,5 @@
 local InGame = {}
-local show_hitbox = true
+local show_hitbox = false
 
 world = nil
 
@@ -42,6 +42,7 @@ function InGame:init()
         :give("position", player.x, player.y)
         :give("velocity")
         :give("speed", 2)
+        :give("health", {max = 5})
         :give("weapon", {
             image = love.graphics.newImage("assets/images/shooter.png"),
             latency = 0.2,
@@ -53,7 +54,17 @@ function InGame:init()
             width = 6,
             height = 5,
             layer = "player",
-            on_entered = function() print("entered") end,
+            on_entered = function(player, foe)
+                if not player.health.invincible and player.health.current > 0 then
+                    player.health.current = player.health.current - 1
+                    player.sprite.current_frame = player.sprite.current_frame + 1
+                    player.health.invincible = true
+                    self.world:emit("playPlayerHitSound")
+                    Timer.after(2, function()
+                        player.health.invincible = false
+                    end)
+                end
+            end,
             rendered = show_hitbox
         })
 
@@ -89,6 +100,7 @@ function InGame:init()
 end
 
 function InGame:update(dt)
+    Timer.update(dt)
     self.world:emit("update", dt)
     self.overlay:emit("update", dt)
 end

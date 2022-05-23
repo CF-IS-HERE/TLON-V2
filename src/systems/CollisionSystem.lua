@@ -20,8 +20,8 @@ function CollisionSystem:update(dt)
                     h=hurt_area.hurtbox.height
                 }
                 if self:isOverlap(r1, r2) then
-                    hit_area.hitbox.on_entered()
-                    hurt_area.hurtbox.on_enter()
+                    hit_area.hitbox.on_entered(hit_area, hurt_area)
+                    hurt_area.hurtbox.on_enter(hurt_area, hit_area)
                 end
             end
         end

@@ -1,21 +1,20 @@
 local AiControlSystem = Concord.system({
-    pool = {'ai_controlled', 'speed', 'position'},
-    pool2 = {'player_controlled', 'speed', 'position'}
+    pool = {'ai_controlled', 'speed', 'position', 'sprite'},
+    pool2 = {'player_controlled', 'speed', 'position', 'sprite'}
 })
 
 function AiControlSystem:update(dt)
     for _, entity in ipairs(self.pool) do
         for _, player in ipairs(self.pool2) do
-            entity.position.x = entity.position.x + (math.cos(self:lemonPlayerAngle(entity, player)) * entity.speed.value * dt)
-            entity.position.y = entity.position.y + (math.sin(self:lemonPlayerAngle(entity, player)) * entity.speed.value * dt)
+            local ex = entity.position.x + entity.sprite.offset.x
+            local ey = entity.position.y + entity.sprite.offset.y
+            local px = player.position.x + player.sprite.offset.x
+            local py = player.position.y + player.sprite.offset.y
+            local angle = math.atan2(py - ey, px - ex)
+            entity.position.x = entity.position.x + (math.cos(angle) * entity.speed.value * dt)
+            entity.position.y = entity.position.y + (math.sin(angle) * entity.speed.value * dt)
         end
     end
-end
-
-
-function AiControlSystem:lemonPlayerAngle(entity, player)
-        local angle = math.atan2( player.position.y - entity.position.y, player.position.x - entity.position.x )
-        return angle
 end
 
 return AiControlSystem
