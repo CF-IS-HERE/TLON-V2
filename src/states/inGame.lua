@@ -59,6 +59,7 @@ function InGame:init()
                     player.health.current = player.health.current - 1
                     player.sprite.current_frame = player.sprite.current_frame + 1
                     player.health.invincible = true
+                    foe.ai_controlled.has_item = true
                     self.world:emit("playPlayerHitSound")
                     Timer.after(2, function()
                         player.health.invincible = false
@@ -82,7 +83,6 @@ function InGame:init()
             width = 6,
             height = 5,
             layer = "player",
-            on_enter = function() print("enter") end,
             rendered = show_hitbox
         })        
 
