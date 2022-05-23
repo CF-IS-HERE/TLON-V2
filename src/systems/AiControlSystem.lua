@@ -16,8 +16,18 @@ function AiControlSystem:update(dt)
             local px = p.position.x + 2 - p.sprite.image:getWidth() / (2 * p.sprite.total_frames)
             local py = p.position.y + 3 + p.sprite.image:getHeight() / (2 * p.sprite.total_frames)
             local angle = math.atan2(py - ey, px - ex)
-            e.position.x = e.position.x + (math.cos(angle) * e.speed.value * dt)
-            e.position.y = e.position.y + (math.sin(angle) * e.speed.value * dt)
+            local speed = e.speed.value
+            if e.ai_controlled.has_item then
+                angle = math.atan2(ey - py, ex - px)
+                speed = speed * 0.8 -- slow down a bit to make it easier to catch
+            end            
+            e.position.x = e.position.x + (math.cos(angle) * speed * dt)
+            e.position.y = e.position.y + (math.sin(angle) * speed * dt)
+
+            -- despawn if out of screen
+            if e.ai_controlled.has_item and (e.position.x > 240 or e.position.x < -40 or e.position.y < -40 or e.position.y > 190) then
+                e:destroy()
+            end
         end
     end
 end

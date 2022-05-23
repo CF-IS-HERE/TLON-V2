@@ -1,0 +1,1 @@
+return Concord.component("out_of_screen_despawn")

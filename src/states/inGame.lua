@@ -1,5 +1,6 @@
 local InGame = {}
 local show_hitbox = false
+local bullet_image = love.graphics.newImage("assets/images/playerBullet.png")
 
 world = nil
 
@@ -11,7 +12,9 @@ function InGame:init()
         Systems.PlayerControlSystem, 
         Systems.AiControlSystem,
         Systems.CollisionSystem,
-        Systems.WeaponSystem)
+        Systems.WeaponSystem,
+        Systems.BulletControlSystem,
+        Systems.OutOfScreenDespawnSystem)
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
@@ -31,7 +34,7 @@ function InGame:init()
     ai.x = 0
     ai.y = 0
 
-    Concord.entity(self.world) 
+    self.player = Concord.entity(self.world) 
         :give("sprite", {
             image = love.graphics.newImage('assets/images/player.png'),
             total_frames = 5,
@@ -46,7 +49,7 @@ function InGame:init()
         :give("weapon", {
             image = love.graphics.newImage("assets/images/shooter.png"),
             latency = 0.2,
-            on_shoot = function() print("shooting") end
+            on_shoot = function() self:spawnBullet() end
         })
         :give("hitbox", {
             offset_x = -8,
@@ -75,6 +78,7 @@ function InGame:init()
         })
         :give("layer", self.scaled_canvas)
         :give("ai_controlled")
+        :give("out_of_screen_despawn")
         :give("position", ai.x, ai.y)
         :give("speed", 50)
         :give("hurtbox", {
@@ -84,7 +88,7 @@ function InGame:init()
             height = 5,
             layer = "player",
             rendered = show_hitbox
-        })        
+        })
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -97,6 +101,29 @@ function InGame:init()
         :give("position")
         :give("follow_cursor", -5, -5)
 
+end
+
+function InGame:spawnBullet()
+    -- to do: calculate this properly
+    local barrel_x = self.player.position.x
+    local barrel_y = self.player.position.y
+    local velocity_x = 100 
+    local velocity_y = 100
+    Concord.entity(self.world)
+        :give("sprite", { image = bullet_image})
+        :give("layer", self.scaled_canvas)
+        :give("cruise_controlled")
+        :give("out_of_screen_despawn")
+        :give("position", barrel_x, barrel_y)
+        :give("velocity", velocity_x, velocity_y)
+        :give("hurtbox", {
+            offset_x = 5,
+            offset_y = 3,
+            width = 6,
+            height = 5,
+            layer = "enemy",
+            rendered = show_hitbox
+        })
 end
 
 function InGame:update(dt)
