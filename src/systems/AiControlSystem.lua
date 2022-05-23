@@ -23,11 +23,6 @@ function AiControlSystem:update(dt)
             end            
             e.position.x = e.position.x + (math.cos(angle) * speed * dt)
             e.position.y = e.position.y + (math.sin(angle) * speed * dt)
-
-            -- despawn if out of screen
-            if e.ai_controlled.has_item and (e.position.x > 240 or e.position.x < -40 or e.position.y < -40 or e.position.y > 190) then
-                e:destroy()
-            end
         end
     end
 end
