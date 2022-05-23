@@ -1,6 +1,6 @@
 local AiControlSystem = Concord.system({
-    pool = {"ai_controlled", "speed", "position", "sprite", "layer"},
-    pool2 = {"player_controlled", "speed", "position", "sprite", "layer"}
+    enemy_pool = {"ai_controlled", "speed", "position", "sprite", "layer"},
+    player_pool = {"player_controlled", "speed", "position", "sprite", "layer"}
 })
 
 function AiControlSystem:init()
@@ -8,21 +8,22 @@ function AiControlSystem:init()
 end
 
 function AiControlSystem:update(dt)
-    for _, entity in ipairs(self.pool) do
-        for _, player in ipairs(self.pool2) do
-            local ex = entity.position.x + entity.sprite.offset.x
-            local ey = entity.position.y + entity.sprite.offset.y
-            local px = player.position.x + player.sprite.offset.x
-            local py = player.position.y + player.sprite.offset.y
+    for _, e in ipairs(self.enemy_pool) do
+        for _, p in ipairs(self.player_pool) do
+            -- get enemy and player centers
+            local ex = e.position.x + e.sprite.image:getWidth() / (2 * e.sprite.total_frames)
+            local ey = e.position.y + e.sprite.image:getHeight() / (2 * e.sprite.total_frames)
+            local px = p.position.x + 2 - p.sprite.image:getWidth() / (2 * p.sprite.total_frames)
+            local py = p.position.y + 3 + p.sprite.image:getHeight() / (2 * p.sprite.total_frames)
             local angle = math.atan2(py - ey, px - ex)
-            entity.position.x = entity.position.x + (math.cos(angle) * entity.speed.value * dt)
-            entity.position.y = entity.position.y + (math.sin(angle) * entity.speed.value * dt)
+            e.position.x = e.position.x + (math.cos(angle) * e.speed.value * dt)
+            e.position.y = e.position.y + (math.sin(angle) * e.speed.value * dt)
         end
     end
 end
 
 function AiControlSystem:draw()
-    for _, e in ipairs(self.pool) do
+    for _, e in ipairs(self.enemy_pool) do
         if e.ai_controlled.has_item then
             love.graphics.setCanvas(e.layer.canvas)
             love.graphics.draw(self.cog_image, e.position.x + 12, e.position.y + 12)
