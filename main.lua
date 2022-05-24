@@ -35,24 +35,6 @@ end
 
 function love.update(dt)
     Flux.update(dt)
-    --Debug Function not final solution - Matthew
-    function love.keypressed(key)
-        if key == "space" and Gamestate.current() ~= State.InGame then
-            Gamestate.switch(State.InGame)
-            -- Debug Print - Matthew
-            print("The Spacebar key was pressed. Gamestate should switch to Game.")
-        end
-
-        if key == "p" and Gamestate.current() ~= State.Pause then
-            Gamestate.push(State.Pause)
-            -- Debug Print - Matthew
-            print("The P key was pressed. Gamestate should switch to Pause.")
-        end
-
-        if key == "delete" and Gamestate.current ~= State.Death then
-            Gamestate.switch(State.Death)
-        end
-    end
 end
 
 function love.draw()
