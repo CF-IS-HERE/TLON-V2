@@ -1,5 +1,7 @@
 return function(entity)
   require 'src/states/InGame'
+  require 'src/systems/AiSpawnSystem'
+  require 'src/systems/GameAudioSystem'
 
     entity:give("sprite", {
       image = generateSprite(),

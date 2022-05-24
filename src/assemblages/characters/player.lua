@@ -1,7 +1,8 @@
-return function(entity, test)
+return function(entity)
 require 'src/states/InGame'
+require 'src/systems/AiSpawnSystem'
 require 'src/systems/GameAudioSystem'
-print(test)
+
     entity:give("sprite", {
         image = love.graphics.newImage('assets/images/player.png'),
         total_frames = 5,
@@ -13,7 +14,7 @@ print(test)
     entity:give("velocity")
     entity:give("speed", 2)
     entity:give("health", {max = 5})
-    entity:give("id", generateEntityID())
+    entity:give("id", generateID())
     entity:give("weapon", {
         image = love.graphics.newImage("assets/images/shooter.png"),
         latency = 0.2,

@@ -14,7 +14,7 @@ function InGame:init()
         Systems.WeaponSystem,
         Systems.AiSpawnSystem)
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
-    
+
     function canvasPush()
         return self.scaled_canvas
     end
@@ -39,10 +39,11 @@ function InGame:init()
     local assemPath = 'src/assemblages/'
     local p = require (assemPath .. 'characters/player')
     local e = require (assemPath .. 'characters/lemon')
-    local passemble = Concord.entity():assemble(p)
-    local eassemble = Concord.entity():assemble(e)
-    self.world:addEntity(passemble)
-    self.world:addEntity(eassemble)
+    local pentity = Concord.entity():assemble(p)
+    local eentity = Concord.entity():assemble(e)
+    self.world:addEntity(pentity)
+    self.world:addEntity(eentity)
+
 --[[
     Concord.entity(self.world)
         :give("sprite", {
@@ -127,43 +128,6 @@ function InGame:draw()
     self.world:emit("draw")
     love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
     self.overlay:emit("draw")
-end
-
-function setPosition()
-  local side = math.random(1, 4)
-  local x , y = nil, nil
-  if side == 1 then
-      x = -15
-      y = math.random(0, love.graphics.getHeight())
-  elseif side == 2 then
-      x = (love.graphics.getWidth() + 15)
-      y = math.random(0, love.graphics.getHeight())
-  elseif side == 3 then
-      x = math.random(0, love.graphics.getWidth())
-      y = -15
-  elseif side == 4 then
-      x = math.random(0, love.graphics.getWidth())
-      y = (love.graphics.getHeight() + 15)
-  end
- return x, y
-end
-
-function generateSprite()
-  local spritenumber = math.random(1, 3)
-  local sprite = nil
-  if spritenumber == 1 then
-      sprite = love.graphics.newImage('assets/images/lemon.png')
-  elseif spritenumber == 2 then
-      sprite = love.graphics.newImage('assets/images/lemon2.png')
-  elseif spritenumber == 3 then
-      sprite = love.graphics.newImage('assets/images/lemon3.png')
-  end
-  return sprite
-end
-
-function generateEntityID()
-  x = 1234
-  return(x)
 end
 
 return InGame
