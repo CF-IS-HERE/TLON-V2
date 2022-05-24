@@ -1,3 +1,9 @@
+local images = {}
+for i=1,3 do
+    local filename = "lemon"..i..".png"
+    images[i] = love.graphics.newImage("assets/images/"..filename)
+end
+
 local getRandomPosition = function()
     local side = math.random(1, 4)
     local x , y = nil, nil
@@ -21,7 +27,7 @@ return function(entity, options)
     local filename = "lemon"..math.random(1, 3)..".png"
     local x, y = getRandomPosition()
     entity:give("sprite", {
-        image = love.graphics.newImage("assets/images/"..filename),
+        image = images[math.random(1, 3)],
     })
     entity:give("layer", options.canvas)
     entity:give("ai_controlled")

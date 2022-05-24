@@ -1,6 +1,9 @@
+local player_image = love.graphics.newImage('assets/images/player.png')
+local weapon_image = love.graphics.newImage("assets/images/shooter.png")
+
 return function(entity, options)
     entity:give("sprite", {
-        image = love.graphics.newImage('assets/images/player.png'),
+        image = player_image,
         total_frames = 5,
         offset = Vector(5, 0)
     })
@@ -11,7 +14,7 @@ return function(entity, options)
     entity:give("speed", 2)
     entity:give("health", {max = 5})
     entity:give("weapon", {
-        image = love.graphics.newImage("assets/images/shooter.png"),
+        image = weapon_image,
         latency = 0.1,
         on_shoot = options.on_shoot,
         offset = Vector(2, -2),

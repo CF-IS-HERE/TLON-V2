@@ -17,6 +17,7 @@ Concord.utils.loadNamespace("src/systems", Systems)
 
 PlayerAssembly = require "src/assemblies/player"
 LemonAssembly = require "src/assemblies/lemon"
+BulletAssembly = require "src/assemblies/bullet"
 
 -- global game settings
 love.graphics.setDefaultFilter("nearest")
