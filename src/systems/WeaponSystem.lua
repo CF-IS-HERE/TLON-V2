@@ -16,13 +16,12 @@ end
 
 function WeaponSystem:draw()
     for _, e in ipairs(self.pool) do
-        local offset = Vector(2, -4) -- weapon offset, might be better within the component itself?
-        local center = Vector(e.position.x - 5, e.position.y + 9) -- center of player, used for rotation
-        local rotation = Vector(love.mouse.getX() - center.x * 4, love.mouse.getY() - center.y * 4)
-        local angle = rotation:angleTo()
-        offset:rotateInplace(angle)
+        local player_center = Vector(e.position.x - 5, e.position.y + 9)
+        local mouse_center = Vector(love.mouse.getX() + 14, love.mouse.getY() + 14)
+        local aim_angle = (mouse_center / 4 - player_center):angleTo() -- account for scale
+        local position = player_center + e.weapon.offset:rotated(aim_angle)
         love.graphics.setCanvas(e.layer.canvas)
-        love.graphics.draw(e.weapon.image, center.x + offset.x, center.y + offset.y, angle, 1, 1)
+        love.graphics.draw(e.weapon.image, position.x, position.y, aim_angle, 1, 1)
         love.graphics.setCanvas()
     end
 end

@@ -9,7 +9,7 @@ return {
         return n
     end,
 
-    rad2deg = function(rad)
+    deg2rad = function(rad)
         return rad / 180 * 3.14
     end
 }

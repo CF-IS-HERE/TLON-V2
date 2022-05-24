@@ -2,7 +2,7 @@ local GameAudioSystem = Concord.system({})
 
 function GameAudioSystem:init()
     self.music = love.audio.newSource("assets/sounds/music/music.wav", "static")
-    self.music:setVolume(0.01) -- set this back to 0.1 later
+    self.music:setVolume(0.1) -- set this back to 0.1 later
     self.music:setLooping(true)
     self.music:play()
     self.sound_enemy_hit = love.audio.newSource('assets/sounds/SFX/enemyHit.wav', "static")
@@ -35,7 +35,7 @@ function GameAudioSystem:playPlayerDeathSound()
     self.sound_player_die:play()
 end
 
-function GameAudioSystem:shoot()
+function GameAudioSystem:playShotSound()
     self.sound_shoot:play()
 end
 
