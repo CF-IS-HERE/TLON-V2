@@ -15,8 +15,11 @@ Systems = {}
 Concord.utils.loadNamespace("src/components")
 Concord.utils.loadNamespace("src/systems", Systems)
 
+PlayerAssembly = require "src/assemblies/player"
+LemonAssembly = require "src/assemblies/lemon"
+
 -- global game settings
-love.graphics.setDefaultFilter( "nearest" )
+love.graphics.setDefaultFilter("nearest")
 
 -- game states like MainMenu, etc.
 State = {}
@@ -24,6 +27,7 @@ Concord.utils.loadNamespace("src/states", State)
 
 function love.load()
     love.mouse.setVisible(false)
+    AudioWorld = Concord.world():addSystems(Systems.GameAudioSystem)
     Gamestate.registerEvents()
     Gamestate.switch(State.MainMenu)
 end

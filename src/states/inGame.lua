@@ -7,7 +7,6 @@ function InGame:init()
     self.world = Concord.world()
     self.world:addSystems(
         Systems.SpriteSystem, 
-        Systems.GameAudioSystem,
         Systems.PlayerControlSystem, 
         Systems.AiControlSystem,
         Systems.CollisionSystem,
@@ -25,57 +24,13 @@ function InGame:init()
         :give("position")
         :give("scale", background_scale_x, background_scale_y)
 
-    self.player = Concord.entity(self.world) 
-        :give("sprite", {
-            image = love.graphics.newImage('assets/images/player.png'),
-            total_frames = 5,
-            offset = Vector(5, 0)
-        })
-        :give("layer", self.scaled_canvas)
-        :give("player_controlled")
-        :give("position", love.graphics.getWidth() / 8, love.graphics.getHeight() / 8)
-        :give("velocity")
-        :give("speed", 2)
-        :give("health", {max = 5})
-        :give("weapon", {
-            image = love.graphics.newImage("assets/images/shooter.png"),
-            latency = 0.1,
-            on_shoot = function() self:spawnBullet() end,
-            offset = Vector(2, -2),
-            muzzle_offset = Vector(6, -2)
-        })
-        :give("hitbox", {
-            center = Vector(-5, 4),
-            radius = 3,
-            layer = "player",
-            on_entered = function(player, foe)
-                if not player.health.invincible and player.health.current > 0 then
-                    player.health.current = player.health.current - 1
-                    player.sprite.current_frame = player.sprite.current_frame + 1
-                    player.health.invincible = true
-                    foe.ai_controlled.has_item = true
-                    self.world:emit("playPlayerHitSound")
-                    Timer.after(2, function()
-                        player.health.invincible = false
-                    end)
-                end
-            end
-        })
-
-    Concord.entity(self.world)
-        :give("sprite", {
-            image = love.graphics.newImage('assets/images/lemon.png'),
-        })
-        :give("layer", self.scaled_canvas)
-        :give("ai_controlled")
-        :give("out_of_screen_despawn")
-        :give("position")
-        :give("speed", 50)
-        :give("hurtbox", {
-            center = Vector(8, 6),
-            radius = 3,
-            layer = "player",
-        })
+    self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
+        canvas = self.scaled_canvas,
+        on_shoot = function() self.spawnBullet(self) end
+    })
+    Concord.entity(self.world):assemble(LemonAssembly, {
+        canvas = self.scaled_canvas
+    })
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -117,7 +72,6 @@ function InGame:spawnBullet()
             layer = "enemy",
         })
     self.world:emit("playShotSound")
-
 end
 
 function InGame:update(dt)
