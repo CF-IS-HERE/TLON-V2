@@ -6,7 +6,7 @@ return function(entity)
       total_frames = 1,
       offset = Vector(5, 0)
       })
-    entity:give("layer", scaled_canvas)
+    entity:give("layer", canvasPush())
     entity:give("position", setPosition())
     entity:give("ai_controlled")
     entity:give("speed", 50)

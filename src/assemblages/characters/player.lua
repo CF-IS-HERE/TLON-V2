@@ -7,7 +7,7 @@ print(test)
         total_frames = 5,
         offset = Vector(5, 0)
         })
-    entity:give("layer", scaled_canvas)
+    entity:give("layer", canvasPush())
     entity:give("player_controlled")
     entity:give("position", love.graphics.getWidth() / 8, love.graphics.getHeight() / 8)
     entity:give("velocity")

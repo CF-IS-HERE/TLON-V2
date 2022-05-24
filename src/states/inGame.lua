@@ -14,6 +14,10 @@ function InGame:init()
         Systems.WeaponSystem,
         Systems.AiSpawnSystem)
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
+    
+    function canvasPush()
+        return self.scaled_canvas
+    end
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
     local background_scale_x = love.graphics.getWidth() / background_img:getWidth()
@@ -35,7 +39,7 @@ function InGame:init()
     local assemPath = 'src/assemblages/'
     local p = require (assemPath .. 'characters/player')
     local e = require (assemPath .. 'characters/lemon')
-    local passemble = Concord.entity():assemble(p, test)
+    local passemble = Concord.entity():assemble(p)
     local eassemble = Concord.entity():assemble(e)
     self.world:addEntity(passemble)
     self.world:addEntity(eassemble)
