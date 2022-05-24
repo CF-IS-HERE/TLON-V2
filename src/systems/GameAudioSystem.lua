@@ -23,8 +23,10 @@ function GameAudioSystem:playEnemyHitSound()
     self.sound_enemy_hit:play()
 end
 
-function GameAudioSystem:playPlayerHitSound()
-    self.sound_player_hit:play(love.math.random(80,120) * 0.01)
+function playPlayerHitSound()
+    --self.sound_player_hit:play(love.math.random(80,120) * 0.01)
+  local test = love.audio.newSource('assets/sounds/SFX/playerStolen.wav', "static")
+  love.audio.play(test)
 end
 
 function GameAudioSystem:playEnemyDeathSound()

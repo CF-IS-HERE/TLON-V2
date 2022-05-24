@@ -1,24 +1,40 @@
-local AiSpawnSystem = Concord.system({
-    pool = {'ai_controlled', 'speed', 'position'}
-})
+local AiSpawnSystem = Concord.system({})
 
-function AiSpawnSystem:setPosition()
-    for _, entity in ipairs(self.pool) do
-        local side = math.random(1, 4)
-        if side == 1 then
-            entity.position.x = -30
-            entity.position.y = math.random(0, love.graphics.getHeight())
-        elseif side == 2 then
-            entity.position.x = (love.graphics.getWidth() + 30)
-            entity.position.y = math.random(0, love.graphics.getHeight())
-        elseif side == 3 then
-            entity.position.x = math.random(0, love.graphics.getWidth())
-            entity.position.y = -30
-        elseif side == 4 then
-            entity.position.x = math.random(0, love.graphics.getWidth())
-            entity.position.y = (love.graphics.getHeight() + 30)
-        end
+math.randomseed(os.time())
+
+function AiSpawnSystem:assembleEntity()
+
+    
+
+end
+
+
+
+
+function AiSpawnSystem:generateID()
+    local result = {}
+    local rand_num = {}
+    local e_Name = "E-"
+
+    for i=1, 500, 1 do
+        table.insert(rand_num, i)
+    end
+
+    for i=1, 5, 1 do
+        local r = math.random(1, #rand_num)
+        table.insert(result, rand_num[r])
+        table.remove(rand_num, r)
+    end
+
+    for i,v in pairs(result) do
+        e_Name = e_Name .. v
+        return e_Name
     end
 end
+
+function AiSpawnSystem:checkID()
+    -- Something to compare ID of Dead Entity and remove from Table
+end
+
 
 return AiSpawnSystem
