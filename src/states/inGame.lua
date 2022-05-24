@@ -1,5 +1,4 @@
 local InGame = {}
-local show_hitbox = false
 local bullet_image = love.graphics.newImage("assets/images/playerBullet.png")
 
 world = nil
@@ -46,10 +45,8 @@ function InGame:init()
             muzzle_offset = Vector(6, -2)
         })
         :give("hitbox", {
-            offset_x = -8,
-            offset_y = 4,
-            width = 6,
-            height = 5,
+            center = Vector(-5, 4),
+            radius = 3,
             layer = "player",
             on_entered = function(player, foe)
                 if not player.health.invincible and player.health.current > 0 then
@@ -62,8 +59,7 @@ function InGame:init()
                         player.health.invincible = false
                     end)
                 end
-            end,
-            rendered = show_hitbox
+            end
         })
 
     Concord.entity(self.world)
@@ -76,12 +72,9 @@ function InGame:init()
         :give("position")
         :give("speed", 50)
         :give("hurtbox", {
-            offset_x = 5,
-            offset_y = 3,
-            width = 6,
-            height = 5,
+            center = Vector(8, 6),
+            radius = 3,
             layer = "player",
-            rendered = show_hitbox
         })
 
     self.overlay = Concord.world()
@@ -104,7 +97,8 @@ function InGame:spawnBullet()
     local muzzle_center = player_center + muzzle_offset
     local rnd_spread = love.math.random(-self.player.weapon.bullet_spread, self.player.weapon.bullet_spread)
     local angle = (mouse_center / 4 - muzzle_center):angleTo() + MathUtils.deg2rad(rnd_spread)
-    local velocity = Vector(self.player.weapon.bullet_speed, 0):rotated(angle)
+    local velocity = Vector(self.player.weapon.bullet_speed, 0):rotated(angle)    
+    local r_muzzle = (muzzle_offset:clone() + Vector(0, 5)):rotated(angle)
     local position = player_center + muzzle_offset:rotated(angle)
 
     Concord.entity(self.world)
@@ -117,6 +111,11 @@ function InGame:spawnBullet()
         :give("out_of_screen_despawn")
         :give("position", position.x, position.y)
         :give("velocity", velocity.x, velocity.y)
+        :give("hurtbox", {
+            center = r_muzzle,
+            radius = 4,
+            layer = "enemy",
+        })
     self.world:emit("playShotSound")
 
 end
