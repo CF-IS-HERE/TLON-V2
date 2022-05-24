@@ -24,9 +24,12 @@ function InGame:init()
         canvas = self.scaled_canvas,
         on_shoot = function() self:spawnBullet(self) end
     })
-    Concord.entity(self.world):assemble(LemonAssembly, {
-        canvas = self.scaled_canvas
-    })
+
+    Timer.every(1, function() 
+        Concord.entity(self.world):assemble(LemonAssembly, {
+            canvas = self.scaled_canvas
+        })
+    end)
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -38,6 +41,10 @@ function InGame:init()
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -5, -5)
+end
+
+function InGame:enter()
+    AudioWorld:emit("playMusic")
 end
 
 function InGame:spawnBullet()
@@ -52,6 +59,10 @@ function InGame:update(dt)
     Timer.update(dt)
     self.world:emit("update", dt)
     self.overlay:emit("update", dt)
+    if love.keyboard.isDown("escape") then
+        AudioWorld:emit("sysCleanUp")
+        Gamestate.push(State.Pause)
+    end  
 end
 
 function InGame:draw()

@@ -27,8 +27,7 @@ function Score:init()
     self.world:addSystems(Systems.SpriteSystem, Systems.UIButtonSystem, Systems.UILabelSystem)
     Concord.entity(self.world)
         :give("sprite", {
-            image = background_img,
-            visible = false
+            image = background_img
         })
         :give("position")
         :give("scale", background_scale_x, background_scale_y)

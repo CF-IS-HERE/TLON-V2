@@ -31,6 +31,9 @@ function Pause:init()
             on_complete = function()
                 if self.background.animation.reversed then
                     Gamestate.pop()
+                    if Gamestate.current() == State.InGame then
+                        AudioWorld:emit("playMusic")
+                    end
                 else
                     self.setButtonState(self, true)
                 end

@@ -12,7 +12,7 @@ return function(entity, options)
     entity:give("position", love.graphics.getWidth() / 8, love.graphics.getHeight() / 8)
     entity:give("velocity")
     entity:give("speed", 2)
-    entity:give("health", {max = 5})
+    entity:give("health", {max = 4})
     entity:give("weapon", {
         image = weapon_image,
         latency = 0.1,
@@ -25,15 +25,21 @@ return function(entity, options)
         radius = 3,
         layer = "player",
         on_entered = function(player, foe)
-            if not player.health.invincible and player.health.current > 0 then
-                player.health.current = player.health.current - 1
-                player.sprite.current_frame = player.sprite.current_frame + 1
-                player.health.invincible = true
-                foe.ai_controlled.has_item = true
-                AudioWorld:emit("playPlayerHitSound")
-                Timer.after(2, function()
-                    player.health.invincible = false
-                end)
+            if not player.health.invincible then
+                if player.health.current > 0 then
+                    player.health.current = player.health.current - 1
+                    player.sprite.current_frame = player.sprite.current_frame + 1
+                    player.health.invincible = true
+                    foe.ai_controlled.has_item = true
+                    AudioWorld:emit("playPlayerHitSound")
+                    Timer.after(2, function()
+                        player.health.invincible = false
+                    end)
+                else
+                    AudioWorld:emit("playPlayerDeathSound")
+                    AudioWorld:emit("sysCleanUp")
+                    Gamestate.switch(State.Death)
+                end
             end
         end
     })

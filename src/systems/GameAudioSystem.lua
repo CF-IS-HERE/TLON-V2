@@ -4,7 +4,6 @@ function GameAudioSystem:init()
     self.music = love.audio.newSource("assets/sounds/music/music.wav", "static")
     self.music:setVolume(0.1) -- set this back to 0.1 later
     self.music:setLooping(true)
-    self.music:play()
     self.sound_enemy_hit = love.audio.newSource('assets/sounds/SFX/enemyHit.wav', "static")
     self.sound_enemy_die = love.audio.newSource('assets/sounds/SFX/enemyDie.wav', "static")
     self.sound_player_hit = love.audio.newSource('assets/sounds/SFX/playerStolen.wav', "static")
@@ -13,6 +12,10 @@ function GameAudioSystem:init()
     for _, sound in ipairs({self.sound_enemy_die, self.sound_enemy_hit, self.sound_player_hit, self.sound_player_die, self.sound_shoot}) do
         sound:setVolume(0.1)
     end
+end
+
+function GameAudioSystem:playMusic()
+    self.music:play()
 end
 
 function GameAudioSystem:sysCleanUp()

@@ -33,7 +33,7 @@ return function(entity, options)
     entity:give("ai_controlled")
     entity:give("out_of_screen_despawn")
     entity:give("position", x, y)
-    entity:give("health", {max = 10})
+    entity:give("health", {max = options.health or 5})
     entity:give("speed", 50)
     entity:give("knockback")
     entity:give("hurtbox", {
@@ -52,8 +52,10 @@ return function(entity, options)
                 local knockback = Vector(2, 0):rotated(knockback_angle)
                 lemon.knockback.x = knockback.x
                 lemon.knockback.y = knockback.y
+                AudioWorld:emit("playEnemyHitSound")
             else
                 lemon:destroy()
+                AudioWorld:emit("playEnemyDeathSound")
             end
             bullet:destroy()
         end
