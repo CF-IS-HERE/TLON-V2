@@ -33,10 +33,29 @@ return function(entity, options)
     entity:give("ai_controlled")
     entity:give("out_of_screen_despawn")
     entity:give("position", x, y)
+    entity:give("health", {max = 10})
     entity:give("speed", 50)
+    entity:give("knockback")
     entity:give("hurtbox", {
         center = Vector(8, 6),
         radius = 3,
         layer = "player",
+    })
+    entity:give("hitbox", {
+        center = Vector(8, 6),
+        radius = 6,
+        layer = "enemy",
+        on_entered = function(lemon, bullet)
+            if lemon.health.current > 0 then
+                lemon.health.current = lemon.health.current - 1
+                local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + 1.57 -- PI/2
+                local knockback = Vector(2, 0):rotated(knockback_angle)
+                lemon.knockback.x = knockback.x
+                lemon.knockback.y = knockback.y
+            else
+                lemon:destroy()
+            end
+            bullet:destroy()
+        end
     })
 end

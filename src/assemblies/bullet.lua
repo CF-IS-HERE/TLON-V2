@@ -15,7 +15,6 @@ return function(entity, options)
         image = bullet_image,
         rotation = angle
     })
-    print(options.canvas:getHeight())
     entity:give("layer", options.canvas)
     entity:give("cruise_controlled")
     entity:give("out_of_screen_despawn")

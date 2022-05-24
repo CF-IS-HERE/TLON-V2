@@ -20,9 +20,11 @@ function AiControlSystem:update(dt)
             if e.ai_controlled.has_item then
                 angle = math.atan2(ey - py, ex - px)
                 speed = speed * 0.8 -- slow down a bit to make it easier to catch
-            end            
-            e.position.x = e.position.x + (math.cos(angle) * speed * dt)
-            e.position.y = e.position.y + (math.sin(angle) * speed * dt)
+            end
+            e.knockback.x = MathUtils.lerp(e.knockback.x, 0, dt * 4)
+            e.knockback.y = MathUtils.lerp(e.knockback.y, 0, dt * 4)
+            e.position.x = e.position.x + e.knockback.x + math.cos(angle) * speed * dt
+            e.position.y = e.position.y + e.knockback.y + math.sin(angle) * speed * dt
         end
     end
 end
