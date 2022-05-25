@@ -1,5 +1,6 @@
 local player_image = love.graphics.newImage('assets/images/player.png')
 local weapon_image = love.graphics.newImage("assets/images/shooter.png")
+local position = Vector(love.graphics.getWidth(), love.graphics.getHeight()) / 8
 
 return function(entity, options)
     entity:give("sprite", {
@@ -9,7 +10,7 @@ return function(entity, options)
     })
     entity:give("layer", options.canvas)
     entity:give("player_controlled")
-    entity:give("position", love.graphics.getWidth() / 8, love.graphics.getHeight() / 8)
+    entity:give("position", position.x, position.y)
     entity:give("velocity")
     entity:give("speed", 2)
     entity:give("health", {max = 4})
@@ -19,6 +20,26 @@ return function(entity, options)
         on_shoot = options.on_shoot,
         offset = Vector(2, -2),
         muzzle_offset = Vector(6, -2)
+    })
+    entity:give("particle_emitter", { -- running particles
+        spawning = true,
+        tick_speed = {a=0.1, b=0.21},
+        offset = Vector(0, 15),
+        spread = 360,
+        particle_data = {
+            speed = {a=0, b=20},
+            rotation = {a=0, b=1},
+            color = {
+                r = {a=0.921, b=0.921},
+                g = {a=0.929, b=0.929},
+                b = {a=0.913, b=0.913},
+                a = {a=0.99, b=1}
+            },
+            width = {a=3, b=3.1},
+            lifetime = {a=1, b=1.01},
+            draw_mode = "circle_glow"
+        },
+        canvas = options.particles_canvas
     })
     entity:give("hitbox", {
         center = Vector(-5, 4),

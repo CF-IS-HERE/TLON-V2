@@ -49,7 +49,7 @@ return function(entity, options)
             if lemon.health.current > 0 then
                 lemon.health.current = lemon.health.current - 1
                 if not lemon.ai_controlled.has_item then -- don't knock back as they're already running away
-                    local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + 3.14
+                    local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + math.pi
                     local knockback = Vector(2, 0):rotated(knockback_angle)
                     lemon.knockback.x = knockback.x
                     lemon.knockback.y = knockback.y

@@ -2,6 +2,8 @@ local InGame = {}
 
 function InGame:init()
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
+    self.particles_canvas = love.graphics.newCanvas(200, 150)
+
     self.world = Concord.world()
     self.world:addSystems(
         Systems.SpriteSystem, 
@@ -10,7 +12,8 @@ function InGame:init()
         Systems.CollisionSystem,
         Systems.WeaponSystem,
         Systems.BulletControlSystem,
-        Systems.OutOfScreenDespawnSystem)
+        Systems.OutOfScreenDespawnSystem,
+        Systems.ParticleSystem)
 
     local background_img = love.graphics.newImage('assets/images/game_background.png')
     local background_scale_x = love.graphics.getWidth() / background_img:getWidth()
@@ -22,6 +25,7 @@ function InGame:init()
 
     self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
         canvas = self.scaled_canvas,
+        particles_canvas = self.particles_canvas,
         on_shoot = function() self:spawnBullet(self) end
     })
 
@@ -45,6 +49,9 @@ end
 
 function InGame:enter()
     AudioWorld:emit("playMusic")
+    -- coming in from main menu, the player might have the mouse button down already
+    self.player.weapon.can_shoot = false
+    Timer.after(0.2, function() self.player.weapon.can_shoot = true end)
 end
 
 function InGame:spawnBullet()
@@ -69,10 +76,14 @@ function InGame:draw()
     -- clean canvas before drawing on it
     love.graphics.setCanvas(self.scaled_canvas)
     love.graphics.clear()
+    love.graphics.setCanvas(self.particles_canvas)
+    love.graphics.clear()
     love.graphics.setCanvas()
-    self.world:emit("draw") -- this will draw things to the scaled canvas
+
+    self.world:emit("draw") -- this will draw things to the scaled canvas and the particle canvas
     -- make sure we're back on the main screen before drawing
     love.graphics.setCanvas()
+    love.graphics.draw(self.particles_canvas, 0, 0, 0, 4, 4)
     love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
     self.overlay:emit("draw")
 end

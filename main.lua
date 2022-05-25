@@ -4,6 +4,7 @@ Timer = require "lib/hump.timer"
 Anim8 = require "lib/anim8.anim8"
 Flux = require "lib/flux.flux"
 
+ArrayUtils = require "src/utils/ArrayUtils"
 ColorUtils = require "src/utils/ColorUtils"
 MathUtils = require "src/utils/MathUtils"
 TextUtils = require "src/utils/TextUtils"

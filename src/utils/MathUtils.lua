@@ -10,6 +10,10 @@ return {
     end,
 
     deg2rad = function(rad)
-        return rad / 180 * 3.14
+        return rad / 180 * math.pi
+    end,
+
+    round = function(x)
+        return math.floor(x + 0.5)
     end
 }
