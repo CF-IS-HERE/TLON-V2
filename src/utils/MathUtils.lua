@@ -1,6 +1,6 @@
 return {
-    lerp = function(a, b, c)
-        return a + (b - a) * c
+    lerp = function(start, finish, percent)
+        return start + (finish - start) * percent
     end,
 
     clamp = function(n, min, max)

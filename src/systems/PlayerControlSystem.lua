@@ -1,5 +1,5 @@
 local PlayerControlSystem = Concord.system({
-    pool = {"player_controlled", "speed", "position", "velocity", "sprite", "particle_emitter"}
+    pool = {"player_controlled", "speed", "position", "velocity", "sprite", "particles"}
 })
 
 function PlayerControlSystem:update(dt)
@@ -14,7 +14,7 @@ function PlayerControlSystem:update(dt)
         entity.position.y = MathUtils.clamp(entity.position.y + entity.velocity.y, -3, 140)
         entity.sprite.flipped = love.mouse.getX() / 4 < entity.position.x + entity.sprite.offset.x
         local is_moving = (math.abs(entity.velocity.x) + math.abs(entity.velocity.y)) / entity.speed.value
-        entity.particle_emitter.ticks = MathUtils.round(is_moving)
+        entity.particles.emitters.run.ticks = MathUtils.round(is_moving)
     end
 end
 

@@ -1,4 +1,11 @@
 local images = {}
+
+local lemon_colors = {
+	{r={a=232/255,b=232/255}, g={a=193/255,b=193/255}, b={a=112/255,b=112/255}, a={a=1,b=1}}, -- orange
+	{r={a=208/255,b=208/255}, g={a=218/255,b=218/255}, b={a=145/255,b=145/255}, a={a=1,b=1}}, -- green
+	{r={a=223/255,b=223/255}, g={a=132/255,b=132/255}, b={a=165/255,b=165/255}, a={a=1,b=1}}  -- purple
+}
+
 for i=1,3 do
     local filename = "lemon"..i..".png"
     images[i] = love.graphics.newImage("assets/images/"..filename)
@@ -24,7 +31,8 @@ local getRandomPosition = function()
 end
 
 return function(entity, options)
-    local filename = "lemon"..math.random(1, 3)..".png"
+    local nb = math.random(1, 3)
+    local filename = "lemon"..nb..".png"
     local x, y = getRandomPosition()
     entity:give("sprite", {
         image = images[math.random(1, 3)],
@@ -33,7 +41,8 @@ return function(entity, options)
     entity:give("ai_controlled")
     entity:give("out_of_screen_despawn")
     entity:give("position", x, y)
-    entity:give("health", {max = options.health or 5})
+    entity:give("health", {max = options.health or 4})
+    entity:give("active")
     entity:give("speed", 50)
     entity:give("knockback")
     entity:give("hurtbox", {
@@ -41,22 +50,42 @@ return function(entity, options)
         radius = 3,
         layer = "player",
     })
+    entity:give("particles", {
+        explode = {
+            canvas = options.splat_canvas,
+            spawning = true,
+            amount = {a=4, b=5},
+            tick_speed = {a=0.1, b=0.11},
+            spread = 20,
+            speed = {a=130, b=200},
+            rotation = {a=0, b=0},
+            force = Vector(3, 0),
+            color = lemon_colors[nb],
+            width = {a=4, b=8},
+            lifetime = {a=0.1, b=0.25},
+            draw_mode = "circle"
+        }
+    })    
     entity:give("hitbox", {
         center = Vector(8, 6),
         radius = 6,
         layer = "enemy",
         on_entered = function(lemon, bullet) -- hit by a bullet
+            local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + math.pi
+            local knockback = Vector(2, 0):rotated(knockback_angle)
             if lemon.health.current > 0 then
                 lemon.health.current = lemon.health.current - 1
                 if not lemon.ai_controlled.has_item then -- don't knock back as they're already running away
-                    local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + math.pi
-                    local knockback = Vector(2, 0):rotated(knockback_angle)
                     lemon.knockback.x = knockback.x
                     lemon.knockback.y = knockback.y
                 end
                 AudioWorld:emit("playEnemyHitSound")
             else
-                lemon:destroy()
+                lemon.particles.emitters.explode.ticks = 1
+                lemon.particles.emitters.explode.rotation = {a=knockback_angle, b=knockback_angle}
+                -- only destroy the entity after the splat is destroyed
+                lemon.active = false
+                lemon.sprite.visible = false
                 AudioWorld:emit("playEnemyDeathSound")
             end
             bullet:destroy()

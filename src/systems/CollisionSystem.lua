@@ -1,25 +1,27 @@
 local CollisionSystem = Concord.system({
-    hitpool = {"position", "hitbox", "layer"},
-    hurtpool = {"position", "hurtbox", "layer"}
+    hitpool = {"position", "hitbox", "layer", "active"},
+    hurtpool = {"position", "hurtbox", "layer", "active"}
 })
 
 function CollisionSystem:update(dt)
     for _, hit_area in ipairs(self.hitpool) do
         for _, hurt_area in ipairs(self.hurtpool) do
-            if hit_area.hitbox.layer == hurt_area.hurtbox.layer then
-                local c1 = {
-                    x=hit_area.position.x + hit_area.hitbox.center.x,
-                    y=hit_area.position.y + hit_area.hitbox.center.y,
-                    r=hit_area.hitbox.radius
-                }
-                local c2 = {
-                    x=hurt_area.position.x + hurt_area.hurtbox.center.x,
-                    y=hurt_area.position.y + hurt_area.hurtbox.center.y,
-                    r=hurt_area.hurtbox.radius
-                }
-                if self:isOverlap(c1, c2) then
-                    hit_area.hitbox.on_entered(hit_area, hurt_area)
-                    hurt_area.hurtbox.on_enter(hurt_area, hit_area)
+            if hit_area.active and hurt_area.active then
+                if hit_area.hitbox.layer == hurt_area.hurtbox.layer then
+                    local c1 = {
+                        x=hit_area.position.x + hit_area.hitbox.center.x,
+                        y=hit_area.position.y + hit_area.hitbox.center.y,
+                        r=hit_area.hitbox.radius
+                    }
+                    local c2 = {
+                        x=hurt_area.position.x + hurt_area.hurtbox.center.x,
+                        y=hurt_area.position.y + hurt_area.hurtbox.center.y,
+                        r=hurt_area.hurtbox.radius
+                    }
+                    if self:isOverlap(c1, c2) then
+                        hit_area.hitbox.on_entered(hit_area, hurt_area)
+                        hurt_area.hurtbox.on_enter(hurt_area, hit_area)
+                    end
                 end
             end
         end

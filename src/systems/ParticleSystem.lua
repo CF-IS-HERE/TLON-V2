@@ -1,5 +1,5 @@
 local ParticleSystem = Concord.system({
-    pool = {"particle_emitter", "position"}
+    pool = {"particles", "position"}
 })
 
 local spawns = {
@@ -31,90 +31,108 @@ local interpolations = {
 
 function ParticleSystem:update(dt)
     for _, e in ipairs(self.pool) do
-        if not e.particle_emitter.particles then
-            e.particle_emitter.particles = {}
-        end
-        e.particle_emitter.timer = e.particle_emitter.timer - dt
-        
-        -- emit particles as long as the timer hasn't run out
-        if e.particle_emitter.timer < 0 and e.particle_emitter.ticks ~= 0 then
-    		e.particle_emitter.ticks = e.particle_emitter.ticks - 1
-	    	e.particle_emitter.timer = love.math.random(e.particle_emitter.tick_speed.a * 100, e.particle_emitter.tick_speed.b * 100) * 0.01
-		    for i=0,love.math.random(e.particle_emitter.amount.a, e.particle_emitter.amount.b) do
-			    local position = spawns[e.particle_emitter.shape.mode](e.position.x + e.particle_emitter.offset.x, e.position.y + e.particle_emitter.offset.y, e.particle_emitter.shape.data)
-			    local lifetime = love.math.random(e.particle_emitter.particle_data.lifetime.a * 100, e.particle_emitter.particle_data.lifetime.b * 100) / 100
-			    local velocity = Vector(love.math.random(e.particle_emitter.particle_data.speed.a, e.particle_emitter.particle_data.speed.b), 0)
-                velocity = velocity:rotated(MathUtils.deg2rad(e.particle_emitter.rotation + love.math.random(-e.particle_emitter.spread, e.particle_emitter.spread)))
-                local r = love.math.random(e.particle_emitter.particle_data.color.r.a*100, e.particle_emitter.particle_data.color.r.b * 100) * 0.01
-                local g = love.math.random(e.particle_emitter.particle_data.color.g.a*100, e.particle_emitter.particle_data.color.g.b * 100) * 0.01
-                local b = love.math.random(e.particle_emitter.particle_data.color.b.a*100, e.particle_emitter.particle_data.color.b.b * 100) * 0.01
-                local a = love.math.random(e.particle_emitter.particle_data.color.a.a*100, e.particle_emitter.particle_data.color.a.b * 100) * 0.01
-
-                table.insert(e.particle_emitter.particles, {
-                    x = position.x,
-                    y = position.y,
-                    velocity = velocity,
-                    width = love.math.random(e.particle_emitter.particle_data.width.a, e.particle_emitter.particle_data.width.b),
-                    lifetime = lifetime,
-                    lifetime_start = lifetime,
-                    color = {r=r, g=g, b=b, a=a},
-                    rotation = love.math.random(e.particle_emitter.particle_data.rotation.a, e.particle_emitter.particle_data.rotation.b)
-                })
+        for i, emitter in pairs(e.particles.emitters) do
+            
+            if not emitter.particles then -- init system
+                emitter.particles = {}
+                emitter.offset = emitter.offset or Vector(0, 0)
+                emitter.spawning = emitter.spawning or false
+                emitter.timer = emitter.timer or 0
+                emitter.speed = emitter.speed or {a=0, b=0}
+                emitter.spread = emitter.spread or 0
+                emitter.ticks = emitter.ticks or 0
+                emitter.tick_speed = emitter.tick_speed or {a=0.1, b=0.11}
+                emitter.rotation = emitter.rotation or {a=0, b=0}
+                emitter.amount = emitter.amount or {a=1, b=2}
+                emitter.shape = emitter.shape or {mode = "point", data = nil}
+                emitter.interpolation = emitter.interpolation or "linear"
+                emitter.force = emitter.force or Vector(0, 0)
+                emitter.color = emitter.color or {r={a=1,b=1}, g={a=1,b=1}, b={a=1,b=1}, a={a=1,b=1}}
             end
-		end
+
+            emitter.timer = emitter.timer - dt
         
-        -- update particles, keep track of those that we need to remove
-        for i, p in pairs(e.particle_emitter.particles) do
-            -- Set color to particles color
-            love.graphics.setColor(p.color.r, p.color.g, p.color.b, p.color.a)
-    
-            -- Add velocity to position
-            p.x = p.x + p.velocity.x * dt
-            p.y = p.y + p.velocity.y * dt
-    
-            -- Rotate vector by rotation and add force
-            p.velocity = p.velocity:rotated(p.rotation * dt)
-            p.velocity.x = p.velocity.x + e.particle_emitter.force.x * dt
-            p.velocity.y = p.velocity.y + e.particle_emitter.force.y * dt
-    
-            -- Decrease lifetime
-            p.lifetime = p.lifetime - dt
-    
-            -- Kill if lifetime < 0
-            if p.lifetime < 0 then e.particle_emitter.particles[i] = nil end
+            -- emit particles as long as the timer hasn't run out
+            if emitter.timer < 0 and emitter.ticks ~= 0 then
+                emitter.ticks = emitter.ticks - 1
+                emitter.timer = love.math.random(emitter.tick_speed.a * 100, emitter.tick_speed.b * 100) * 0.01
+                for i=0,love.math.random(emitter.amount.a, emitter.amount.b) do
+                    local position = spawns[emitter.shape.mode](e.position.x + emitter.offset.x, e.position.y + emitter.offset.y, emitter.shape.data)
+                    local lifetime = love.math.random(emitter.lifetime.a * 100, emitter.lifetime.b * 100) / 100
+                    local velocity = Vector(love.math.random(emitter.speed.a, emitter.speed.b), 0)
+                    local rotation = love.math.random(emitter.rotation.a, emitter.rotation.b)
+                    rotation = rotation + MathUtils.deg2rad(love.math.random(-emitter.spread, emitter.spread))
+                    velocity = velocity:rotated(rotation)
+                    local r = love.math.random(emitter.color.r.a * 100, emitter.color.r.b * 100) * 0.01
+                    local g = love.math.random(emitter.color.g.a * 100, emitter.color.g.b * 100) * 0.01
+                    local b = love.math.random(emitter.color.b.a * 100, emitter.color.b.b * 100) * 0.01
+                    local a = love.math.random(emitter.color.a.a * 100, emitter.color.a.b * 100) * 0.01
+                    table.insert(emitter.particles, {
+                        x = position.x,
+                        y = position.y,
+                        velocity = velocity,
+                        width = love.math.random(emitter.width.a, emitter.width.b),
+                        lifetime = lifetime,
+                        lifetime_start = lifetime,
+                        color = {r=r, g=g, b=b, a=a},
+                        rotation = rotation
+                    })
+                end
+            end
+            
+            -- update particles, keep track of those that we need to remove
+            for i, p in pairs(emitter.particles) do
+                -- Add velocity to position
+                p.x = p.x + p.velocity.x * dt
+                p.y = p.y + p.velocity.y * dt
+        
+                -- Rotate vector by rotation and add force
+                p.velocity = p.velocity + emitter.force * dt
+                
+                -- Decrease lifetime
+                p.lifetime = p.lifetime - dt
+        
+                -- Kill if lifetime < 0
+                if p.lifetime < 0 then emitter.particles[i] = nil end
+            end
+            ArrayUtils.compact(emitter.particles)
         end
-        ArrayUtils.compact(e.particle_emitter.particles)
     end
 end
 
 local draws = {
     circle = function(particle, width)
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
         love.graphics.circle("fill", particle.x, particle.y, width)
     end,
     circle_glow = function(particle, width)
+        love.graphics.setColor(1, 1, 1, 1)
         love.graphics.circle("fill", particle.x, particle.y, width)
-        local r,g,b,a = love.graphics.getColor()
-        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.4)
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
         love.graphics.circle("fill", particle.x, particle.y, width * 1.4)
-        love.graphics.setColor(r, g, b, a)
     end,
     square = function(particle, width)
         local offset = width * 0.5
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
         love.graphics.rectangle("fill", particle.x - offset, particle.y - offset, width, width)
     end
 }
 
 function ParticleSystem:draw()
+    local r,g,b,a = love.graphics.getColor()
     for _, e in ipairs(self.pool) do
-        love.graphics.setCanvas(e.particle_emitter.canvas)
-        for _, p in pairs(e.particle_emitter.particles) do
-            if p.lifetime > 0 then
-                local width = interpolations[e.particle_emitter.interpolation](p.width, p.lifetime, p.lifetime_start)
-                draws[e.particle_emitter.particle_data.draw_mode](p, width)
+        for i, emitter in pairs(e.particles.emitters) do
+            love.graphics.setCanvas(emitter.canvas)
+            for _, p in pairs(emitter.particles) do
+                if p.lifetime > 0 then
+                    local width = interpolations[emitter.interpolation](p.width, p.lifetime, p.lifetime_start)
+                    draws[emitter.draw_mode](p, width)
+                end
             end
+            love.graphics.setCanvas()
         end
-        love.graphics.setCanvas()
 	end
+    love.graphics.setColor(r, g, b, a)
 end
 
 return ParticleSystem

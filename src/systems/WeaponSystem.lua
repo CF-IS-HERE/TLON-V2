@@ -1,5 +1,5 @@
 local WeaponSystem = Concord.system({
-    pool = {"position", "weapon", "layer"}
+    pool = {"position", "weapon", "layer", "particles"}
 })
 
 function WeaponSystem:update(dt)

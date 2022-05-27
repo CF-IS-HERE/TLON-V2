@@ -2,7 +2,9 @@ local InGame = {}
 
 function InGame:init()
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
-    self.particles_canvas = love.graphics.newCanvas(200, 150)
+    self.ground_canvas = love.graphics.newCanvas(200, 150) -- used for ground particles
+    self.sky_canvas = love.graphics.newCanvas(200, 150) -- used for sky particles
+    self.splat_canvases = {} -- these are never cleared for a splat effect
 
     self.world = Concord.world()
     self.world:addSystems(
@@ -25,13 +27,19 @@ function InGame:init()
 
     self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
         canvas = self.scaled_canvas,
-        particles_canvas = self.particles_canvas,
+        ground_canvas = self.ground_canvas,
         on_shoot = function() self:spawnBullet(self) end
     })
 
     Timer.every(1, function() 
-        Concord.entity(self.world):assemble(LemonAssembly, {
-            canvas = self.scaled_canvas
+        local splat_canvas = love.graphics.newCanvas(200, 150)
+        local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
+            canvas = self.scaled_canvas,
+            splat_canvas = splat_canvas
+        })
+        table.insert(self.splat_canvases, {
+            lemon = lemon,
+            canvas = splat_canvas
         })
     end)
 
@@ -47,6 +55,15 @@ function InGame:init()
         :give("follow_cursor", -5, -5)
 end
 
+function InGame:cleanupSplats()
+    for i, s in ipairs(self.splat_canvases) do
+        if self.splat_canvases[i].canvas.color.a <= 0 then
+            self.splat_canvases[i] = nil
+        end
+    end
+    ArrayUtils.compact(self.splat_canvases)
+end
+
 function InGame:enter()
     AudioWorld:emit("playMusic")
     -- coming in from main menu, the player might have the mouse button down already
@@ -57,6 +74,7 @@ end
 function InGame:spawnBullet()
     Concord.entity(self.world):assemble(BulletAssembly, {
         canvas = self.scaled_canvas,
+        sky_canvas = self.sky_canvas,
         player = self.player
     })
     AudioWorld:emit("playShotSound")
@@ -74,17 +92,27 @@ end
 
 function InGame:draw()
     -- clean canvas before drawing on it
-    love.graphics.setCanvas(self.scaled_canvas)
-    love.graphics.clear()
-    love.graphics.setCanvas(self.particles_canvas)
-    love.graphics.clear()
+    for _, c in ipairs({self.scaled_canvas, self.ground_canvas, self.sky_canvas}) do
+        love.graphics.setCanvas(c)
+        love.graphics.clear()
+    end
     love.graphics.setCanvas()
 
     self.world:emit("draw") -- this will draw things to the scaled canvas and the particle canvas
     -- make sure we're back on the main screen before drawing
     love.graphics.setCanvas()
-    love.graphics.draw(self.particles_canvas, 0, 0, 0, 4, 4)
+    -- draw splats first as they are each drawn on their own canvas
+    local r,g,b,a = love.graphics.getColor()
+    for _, c in ipairs(self.splat_canvases) do
+        if c.lemon.layer.color.a > 0 then
+            love.graphics.setColor(1, 1, 1, c.lemon.layer.color.a)
+            love.graphics.draw(c.canvas, 0, 0, 0, 4, 4)
+        end
+    end
+    love.graphics.setColor(r,g,b,a)
+    love.graphics.draw(self.ground_canvas, 0, 0, 0, 4, 4)
     love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
+    love.graphics.draw(self.sky_canvas, 0, 0, 0, 4, 4)
     self.overlay:emit("draw")
 end
 

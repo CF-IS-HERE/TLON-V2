@@ -12,6 +12,7 @@ return function(entity, options)
     entity:give("player_controlled")
     entity:give("position", position.x, position.y)
     entity:give("velocity")
+    entity:give("active")
     entity:give("speed", 2)
     entity:give("health", {max = 4})
     entity:give("weapon", {
@@ -21,12 +22,13 @@ return function(entity, options)
         offset = Vector(2, -2),
         muzzle_offset = Vector(6, -2)
     })
-    entity:give("particle_emitter", { -- running particles
-        spawning = true,
-        tick_speed = {a=0.1, b=0.21},
-        offset = Vector(0, 15),
-        spread = 360,
-        particle_data = {
+    entity:give("particles", {
+        run = {
+            canvas = options.ground_canvas,
+            spawning = true,
+            tick_speed = {a=0.1, b=0.21},
+            offset = Vector(0, 15),
+            spread = 360,
             speed = {a=0, b=20},
             rotation = {a=0, b=1},
             color = {
@@ -38,8 +40,7 @@ return function(entity, options)
             width = {a=3, b=3.1},
             lifetime = {a=1, b=1.01},
             draw_mode = "circle_glow"
-        },
-        canvas = options.particles_canvas
+        }
     })
     entity:give("hitbox", {
         center = Vector(-5, 4),
