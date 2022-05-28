@@ -73,14 +73,19 @@ return function(entity, options)
         on_entered = function(lemon, bullet) -- hit by a bullet
             local knockback_angle = Vector(bullet.position.x - lemon.position.x, bullet.position.y - lemon.position.y):angleTo() + math.pi
             local knockback = Vector(2, 0):rotated(knockback_angle)
-            if lemon.health.current > 0 then
+            if lemon.health.current > 0 and not lemon.health.invincible then
                 lemon.health.current = lemon.health.current - 1
+                lemon.health.invincible = true
+                lemon.sprite.flash_intensity = 0.7
+                Timer.after(0.2, function()
+                    lemon.health.invincible = false
+                end)
                 if not lemon.ai_controlled.has_item then -- don't knock back as they're already running away
                     lemon.knockback.x = knockback.x
                     lemon.knockback.y = knockback.y
                 end
                 AudioWorld:emit("playEnemyHitSound")
-            else
+            elseif lemon.health.current == 0 then
                 lemon.particles.emitters.explode.ticks = 1
                 lemon.particles.emitters.explode.offset = {x = lemon.knockback.x * -1, y = lemon.knockback.y * -1}
                 lemon.particles.emitters.explode.rotation = {a=knockback_angle, b=knockback_angle}

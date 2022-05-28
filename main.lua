@@ -9,6 +9,8 @@ ColorUtils = require "src/utils/ColorUtils"
 MathUtils = require "src/utils/MathUtils"
 TextUtils = require "src/utils/TextUtils"
 
+FlashShader = love.graphics.newShader((love.filesystem.read("src/shaders/FLASH.fs")))
+
 -- set up ECS globals
 Concord = require 'lib/concord'
 

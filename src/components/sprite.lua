@@ -6,6 +6,7 @@ return Concord.component("sprite", function(self, options)
     self.visible = options.visible
     self.rotation = options.rotation
     self.offset = options.offset or Vector(0, 0)
+    self.flash_intensity = options.flash_intensity or 0
     if self.visible == nil then
         self.visible = true
     end
