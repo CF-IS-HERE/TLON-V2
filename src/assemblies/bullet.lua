@@ -7,7 +7,7 @@ return function(entity, options)
     local muzzle_center = player_center + muzzle_offset
     local rnd_spread = love.math.random(-options.player.weapon.bullet_spread, options.player.weapon.bullet_spread)
     local angle = (mouse_center / 4 - muzzle_center):angleTo() + MathUtils.deg2rad(rnd_spread)
-    local velocity = Vector(options.player.weapon.bullet_speed, 0):rotated(angle)    
+    local velocity = Vector(options.player.weapon.bullet_speed, 0):rotated(angle)
     local r_muzzle = (muzzle_offset:clone() + Vector(0, 5)):rotated(angle)
     local offset_particles = (muzzle_offset:clone() * 0.7 + Vector(0, 5)):rotated(angle)
     local position = player_center + muzzle_offset:rotated(angle)
@@ -45,7 +45,7 @@ return function(entity, options)
             },
             width = {a=4, b=4},
             lifetime = {a=0.2, b=0.2},
-            draw_mode = "circle_glow"            
-        }        
+            draw_mode = "circle_glow"
+        }
     })
 end

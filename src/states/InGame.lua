@@ -28,6 +28,7 @@ function InGame:init()
     self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
         canvas = self.scaled_canvas,
         ground_canvas = self.ground_canvas,
+        sky_canvas = self.sky_canvas,
         on_shoot = function() self:spawnBullet(self) end
     })
 

@@ -65,7 +65,7 @@ return function(entity, options)
             lifetime = {a=0.1, b=0.25},
             draw_mode = "circle"
         }
-    })    
+    })
     entity:give("hitbox", {
         center = Vector(8, 6),
         radius = 6,
@@ -82,6 +82,7 @@ return function(entity, options)
                 AudioWorld:emit("playEnemyHitSound")
             else
                 lemon.particles.emitters.explode.ticks = 1
+                lemon.particles.emitters.explode.offset = lemon.knockback
                 lemon.particles.emitters.explode.rotation = {a=knockback_angle, b=knockback_angle}
                 -- only destroy the entity after the splat is destroyed
                 lemon.active = false

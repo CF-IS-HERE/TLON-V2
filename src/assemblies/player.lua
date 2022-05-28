@@ -40,6 +40,19 @@ return function(entity, options)
             width = {a=3, b=3.1},
             lifetime = {a=1, b=1.01},
             draw_mode = "circle_glow"
+        },
+        death = {
+            canvas = options.sky_canvas,
+            spawning = true,
+            amount = {a=20, b=28},
+            tick_speed = {a=0.1, b=0.11},
+            spread = 360,
+            speed = {a=20, b=101},
+            rotation = {a=100, b=100},
+            color = {r={a=0.99, b=1}, g={a=0.99, b=1}, b={a=0.99, b=1}, a={a=0.99, b=1}},
+            width = {a=8, b=16},
+            lifetime = {a=3, b=3.51},
+            draw_mode = "circle"
         }
     })
     entity:give("hitbox", {
@@ -58,9 +71,17 @@ return function(entity, options)
                         player.health.invincible = false
                     end)
                 else
-                    AudioWorld:emit("playPlayerDeathSound")
-                    AudioWorld:emit("sysCleanUp")
-                    Gamestate.switch(State.Death)
+                    if not player.dying then
+                        player.dying = true
+                        player.particles.emitters.death.ticks = 1
+                        player.sprite.visible = false
+                        player.active = false
+                        AudioWorld:emit("playPlayerDeathSound")
+                    end
+                    Timer.after(2, function()
+                        AudioWorld:emit("sysCleanUp")
+                        Gamestate.switch(State.Death)
+                    end)
                 end
             end
         end
