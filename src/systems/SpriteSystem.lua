@@ -3,8 +3,11 @@ local SpriteSystem = Concord.system({
     canvas_pool = {"sprite", "position", "layer"}
 })
 
+local sprite_timer = 0
+
 function SpriteSystem:drawSprite(e)
     if e.sprite.visible then
+        local r,g,b,a = love.graphics.getColor()
         local sx = e.scale and e.scale.x or 1
         local sy = e.scale and e.scale.y or 1
         local ex = e.position.x - e.sprite.offset.x
@@ -13,6 +16,9 @@ function SpriteSystem:drawSprite(e)
         if e.sprite.flash_intensity > 0.5 then
             love.graphics.setShader(FlashShader)
             FlashShader:send("intensity", e.sprite.flash_intensity)
+        end
+        if e.sprite.blinking then
+            love.graphics.setColor(1, 1, 1, math.cos(sprite_timer * 2) / 4 + 0.75)
         end
         if e.sprite.total_frames > 1 then
             local qw = e.sprite.image:getWidth() / e.sprite.total_frames
@@ -25,10 +31,12 @@ function SpriteSystem:drawSprite(e)
             love.graphics.draw(e.sprite.image, ex, ey, e.sprite.rotation, sx, sy)
         end
         love.graphics.setShader()
+        love.graphics.setColor(r,g,b,a)
     end
 end
 
 function SpriteSystem:updateSprite(e, dt)
+    sprite_timer = sprite_timer + dt
     if e.sprite.flash_intensity > 0 then
         e.sprite.flash_intensity = MathUtils.clamp(e.sprite.flash_intensity - dt, 0.5, 1)
     end

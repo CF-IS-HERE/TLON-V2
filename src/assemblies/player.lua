@@ -64,11 +64,13 @@ return function(entity, options)
                 if player.health.current > 0 then
                     player.health.current = player.health.current - 1
                     player.sprite.current_frame = player.sprite.current_frame + 1
+                    player.sprite.blinking = true
                     player.health.invincible = true
                     foe.ai_controlled.has_item = true
                     AudioWorld:emit("playPlayerHitSound")
                     Timer.after(2, function()
                         player.health.invincible = false
+                        player.sprite.blinking = false
                     end)
                 else
                     if not player.dying then

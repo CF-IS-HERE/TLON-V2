@@ -77,7 +77,7 @@ return function(entity, options)
                 lemon.health.current = lemon.health.current - 1
                 lemon.health.invincible = true
                 lemon.sprite.flash_intensity = 0.7
-                Timer.after(0.2, function()
+                Timer.after(0.1, function()
                     lemon.health.invincible = false
                 end)
                 if not lemon.ai_controlled.has_item then -- don't knock back as they're already running away
