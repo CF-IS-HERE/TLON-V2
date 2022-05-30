@@ -8,9 +8,10 @@ return function(entity, options)
         total_frames = 5,
         offset = Vector(5, 0)
     })
-    entity:give("layer", options.canvas)
+    entity:give("layer", Canvas.game_entities)
     entity:give("player_controlled")
     entity:give("position", position.x, position.y)
+    entity:give("scale")
     entity:give("velocity")
     entity:give("active")
     entity:give("speed", 2)
@@ -24,7 +25,7 @@ return function(entity, options)
     })
     entity:give("particles", {
         run = {
-            canvas = options.ground_canvas,
+            canvas = Canvas.ground_particles,
             spawning = true,
             tick_speed = {a=0.1, b=0.21},
             offset = Vector(0, 15),
@@ -42,7 +43,7 @@ return function(entity, options)
             draw_mode = "circle_glow"
         },
         death = {
-            canvas = options.sky_canvas,
+            canvas = Canvas.sky_particles,
             spawning = true,
             amount = {a=20, b=28},
             tick_speed = {a=0.1, b=0.11},

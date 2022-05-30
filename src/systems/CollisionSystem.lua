@@ -48,7 +48,7 @@ function CollisionSystem:draw()
             local y=e.position.y + e.hitbox.center.y
             local r=e.hitbox.radius
             self:renderArea(e, x, y, r)
-        end 
+        end
     end
     for _, e in ipairs(self.hurtpool) do
         if e.hurtbox.rendered then
@@ -56,7 +56,7 @@ function CollisionSystem:draw()
             local y=e.position.y + e.hurtbox.center.y
             local r=e.hurtbox.radius
             self:renderArea(e, x, y, r)
-        end 
+        end
     end
 end
 

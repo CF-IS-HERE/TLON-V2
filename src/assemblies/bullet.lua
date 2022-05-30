@@ -16,9 +16,10 @@ return function(entity, options)
         image = bullet_image,
         rotation = angle
     })
-    entity:give("layer", options.canvas)
+    entity:give("layer", Canvas.game_entities)
     entity:give("cruise_controlled")
     entity:give("active")
+    entity:give("scale")
     entity:give("out_of_screen_despawn")
     entity:give("position", position.x, position.y)
     entity:give("velocity", velocity.x, velocity.y)
@@ -29,7 +30,7 @@ return function(entity, options)
     })
     entity:give("particles", {
         shoot = {
-            canvas = options.sky_canvas,
+            canvas = Canvas.sky_particles,
             spawning = true,
             offset = offset_particles,
             amount = {a=1, b=1},

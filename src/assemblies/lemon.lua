@@ -37,12 +37,13 @@ return function(entity, options)
     entity:give("sprite", {
         image = images[nb],
     })
-    entity:give("layer", options.canvas)
+    entity:give("layer", Canvas.game_entities)
     entity:give("ai_controlled")
     entity:give("out_of_screen_despawn")
     entity:give("position", x, y)
     entity:give("health", {max = options.health or 4})
     entity:give("active")
+    entity:give("scale")
     entity:give("speed", 50)
     entity:give("knockback")
     entity:give("hurtbox", {

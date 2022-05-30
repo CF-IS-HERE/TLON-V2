@@ -1,15 +1,10 @@
 local InGame = {}
 
 function InGame:init()
-    self.scaled_canvas = love.graphics.newCanvas(200, 150)
-    self.ground_canvas = love.graphics.newCanvas(200, 150) -- used for ground particles
-    self.sky_canvas = love.graphics.newCanvas(200, 150) -- used for sky particles
-    self.splat_canvases = {} -- these are never cleared for a splat effect
-
     self.world = Concord.world()
     self.world:addSystems(
-        Systems.SpriteSystem, 
-        Systems.PlayerControlSystem, 
+        Systems.SpriteSystem,
+        Systems.PlayerControlSystem,
         Systems.AiControlSystem,
         Systems.CollisionSystem,
         Systems.WeaponSystem,
@@ -17,25 +12,20 @@ function InGame:init()
         Systems.OutOfScreenDespawnSystem,
         Systems.ParticleSystem)
 
-    local background_img = love.graphics.newImage('assets/images/game_background.png')
-    local background_scale_x = love.graphics.getWidth() / background_img:getWidth()
-    local background_scale_y = love.graphics.getHeight() / background_img:getHeight()
     Concord.entity(self.world)
-        :give("sprite", {image = background_img})
+        :give("sprite", {image = love.graphics.newImage('assets/images/game_background.png')})
+        :give("scale")
         :give("position")
-        :give("scale", background_scale_x, background_scale_y)
+        :give("layer", Canvas.game_background)
 
     self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
-        canvas = self.scaled_canvas,
-        ground_canvas = self.ground_canvas,
-        sky_canvas = self.sky_canvas,
         on_shoot = function() self:spawnBullet(self) end
     })
 
-    Timer.every(1, function() 
-        local splat_canvas = love.graphics.newCanvas(200, 150)
+    self.splat_canvases = {} -- list of canvases that never get cleared so that the particles can have a splat effect
+    Timer.every(1, function()
+        local splat_canvas = getNewCanvas(1/4)
         local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
-            canvas = self.scaled_canvas,
             splat_canvas = splat_canvas
         })
         table.insert(self.splat_canvases, {
@@ -51,6 +41,7 @@ function InGame:init()
     )
     Concord.entity(self.overlay)
         :give("sprite", {image = love.graphics.newImage("assets/images/mouse/target.png")})
+        :give("layer", Canvas.ui_overlay)
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -5, -5)
@@ -74,8 +65,6 @@ end
 
 function InGame:spawnBullet()
     Concord.entity(self.world):assemble(BulletAssembly, {
-        canvas = self.scaled_canvas,
-        sky_canvas = self.sky_canvas,
         player = self.player
     })
     AudioWorld:emit("playShotSound")
@@ -88,22 +77,30 @@ function InGame:update(dt)
     if love.keyboard.isDown("escape") then
         AudioWorld:emit("sysCleanUp")
         Gamestate.push(State.Pause)
-    end  
+    end
 end
 
 function InGame:draw()
+
     -- clean canvas before drawing on it
-    for _, c in ipairs({self.scaled_canvas, self.ground_canvas, self.sky_canvas}) do
+    for _, c in ipairs({Canvas.game_background, Canvas.game_entities, Canvas.ground_particles, Canvas.game_entities, Canvas.sky_particles, Canvas.ui_overlay}) do
         love.graphics.setCanvas(c)
         love.graphics.clear()
     end
+    -- always draw into specific canvases
+    self.world:emit("draw")
+    self.overlay:emit("draw")
+
     love.graphics.setCanvas()
 
-    self.world:emit("draw") -- this will draw things to the scaled canvas and the particle canvas
-    -- make sure we're back on the main screen before drawing
-    love.graphics.setCanvas()
-    -- draw splats first as they are each drawn on their own canvas
+    -- start drawing canvases in order
+    love.graphics.draw(Canvas.game_background, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    -- love.graphics.draw(Canvas.game_background, viewportLeft + shakeX * displayScale, viewportTop + shakeY * displayScale, 0, displayScale, displayScale)
+
+    -- draw the splats on the ground next
     local r,g,b,a = love.graphics.getColor()
+    -- draw splats first as they are each drawn on their own canvas
+    -- to remove the splats from the game, we first reduce the opacity of their associated canvases
     for _, c in ipairs(self.splat_canvases) do
         if c.lemon.layer.color.a > 0 then
             love.graphics.setColor(1, 1, 1, c.lemon.layer.color.a)
@@ -111,10 +108,12 @@ function InGame:draw()
         end
     end
     love.graphics.setColor(r,g,b,a)
-    love.graphics.draw(self.ground_canvas, 0, 0, 0, 4, 4)
-    love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
-    love.graphics.draw(self.sky_canvas, 0, 0, 0, 4, 4)
-    self.overlay:emit("draw")
+
+    love.graphics.draw(Canvas.ground_particles, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.game_entities, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.sky_particles, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.ui_overlay, viewportLeft , viewportTop, 0, DisplayScale, DisplayScale)
+
 end
 
 return InGame

@@ -1,5 +1,5 @@
 local UIButtonSystem = Concord.system({
-    pool = {"scale", "position", "button"}
+    pool = {"position", "button", "layer"}
 })
 
 function UIButtonSystem:init(world)
@@ -12,16 +12,17 @@ end
 function UIButtonSystem:draw()
     for _, e in ipairs(self.pool) do
         if e.button.visible then
-            local mx = love.mouse.getX() - 5
-            local my = love.mouse.getY() - 5
+            love.graphics.setCanvas(e.layer.canvas)
+            local mx = love.mouse.getX() / PixelRatio
+            local my = love.mouse.getY() / PixelRatio
             local ex = e.position.x
             local ey = e.position.y
             assert(e.button.image_idle)
-            local width = e.button.image_idle:getWidth() * e.scale.x
-            local height = e.button.image_idle:getHeight() * e.scale.y
+            local width = e.button.image_idle:getWidth()
+            local height = e.button.image_idle:getHeight()
 
             if e.button.disabled then
-                love.graphics.draw(e.button.image_disabled, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+                love.graphics.draw(e.button.image_disabled, e.position.x, e.position.y)
             else
                 if mx > ex and mx < ex + width and my > ey and my < ey + height then
                     if not e.entered then
@@ -42,18 +43,19 @@ function UIButtonSystem:draw()
                         e.button.on_click()
                     end
                     if e.pressed then
-                        love.graphics.draw(e.button.image_active, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+                        love.graphics.draw(e.button.image_active, e.position.x, e.position.y)
                     else
-                        love.graphics.draw(e.button.image_hover, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+                        love.graphics.draw(e.button.image_hover, e.position.x, e.position.y)
                     end
                 else
-                    love.graphics.draw(e.button.image_idle, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
+                    love.graphics.draw(e.button.image_idle, e.position.x, e.position.y)
                     if e.entered then
                         e.entered = false
                         e.button.on_mouse_leave()
                     end
                 end
             end
+            love.graphics.setCanvas()
         end
     end
 end

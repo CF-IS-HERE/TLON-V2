@@ -1,9 +1,10 @@
 local UILabelSystem = Concord.system({
-    pool = {"label", "position"}
+    pool = {"label", "position", "layer"}
 })
 
 function UILabelSystem:draw()
     for _, e in ipairs(self.pool) do
+        love.graphics.setCanvas(e.layer.canvas)
         -- store previous values so that we can re-set them after printing our label
         local _r,_g,_b,_a = love.graphics.getColor()
         local _f = love.graphics.getFont()
@@ -26,6 +27,7 @@ function UILabelSystem:draw()
         love.graphics.print(e.label.text, e.position.x, e.position.y)
         love.graphics.setColor(_r,_g,_b,_a)
         love.graphics.setFont(_f)
+        love.graphics.setCanvas()
     end
 end
 
