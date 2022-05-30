@@ -9,7 +9,6 @@ return function(entity, options)
     entity:give("hitbox", {
         center = Vector(4, 4),
         radius = 5,
-        layer = "cog",
-        rendered = true
+        layer = "cog"
     })
 end
