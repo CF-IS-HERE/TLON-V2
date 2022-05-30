@@ -76,6 +76,7 @@ return function(entity, options)
                 else
                     if not player.dying then
                         player.dying = true
+                        Camera.shake(4, 1)
                         player.particles.emitters.death.ticks = 1
                         player.sprite.visible = false
                         player.active = false

@@ -8,6 +8,7 @@ ArrayUtils = require "src/utils/ArrayUtils"
 ColorUtils = require "src/utils/ColorUtils"
 MathUtils = require "src/utils/MathUtils"
 TextUtils = require "src/utils/TextUtils"
+Camera = require "src/camera/Camera"
 
 FlashShader = love.graphics.newShader((love.filesystem.read("src/shaders/FLASH.fs")))
 
@@ -62,6 +63,7 @@ end
 
 function love.update(dt)
     Flux.update(dt)
+    Camera.update(dt)
 end
 
 function love.keypressed(key)

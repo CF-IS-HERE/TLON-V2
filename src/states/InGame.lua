@@ -94,8 +94,8 @@ function InGame:draw()
     love.graphics.setCanvas()
 
     -- start drawing canvases in order
-    love.graphics.draw(Canvas.game_background, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
-    -- love.graphics.draw(Canvas.game_background, viewportLeft + shakeX * displayScale, viewportTop + shakeY * displayScale, 0, displayScale, displayScale)
+    local shake = Camera.getCurrentShake()
+    love.graphics.draw(Canvas.game_background, ViewPort.left + shake.x, ViewPort.top + shake.y, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
 
     -- draw the splats on the ground next
     local r,g,b,a = love.graphics.getColor()

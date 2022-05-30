@@ -72,7 +72,7 @@ return function(entity, options)
             amount = {a=10, b=15},
             tick_speed = {a=0.1, b=0.11},
             spread = 360,
-            speed = {a=20, b=101},
+            speed = {a=10, b=40},
             rotation = {a=100, b=100},
             color = lemon_colors[nb],
             width = {a=.2, b=.5},
@@ -88,8 +88,8 @@ return function(entity, options)
             speed = {a=20, b=101},
             rotation = {a=100, b=100},
             color = {r={a=0.99, b=1}, g={a=0.99, b=1}, b={a=0.99, b=1}, a={a=0.99, b=1}},
-            width = {a=2, b=4},
-            lifetime = {a=1, b=1.5},
+            width = {a=1, b=2},
+            lifetime = {a=0.5, b=1},
             draw_mode = "circle"
         }
     })
@@ -121,6 +121,7 @@ return function(entity, options)
                 -- only destroy the entity after the splat is destroyed
                 lemon.active = false
                 lemon.sprite.visible = false
+                Camera.shake(2, 0.3)
                 AudioWorld:emit("playEnemyDeathSound")
             end
             bullet:destroy()
