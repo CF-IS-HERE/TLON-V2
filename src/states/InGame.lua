@@ -26,7 +26,8 @@ function InGame:init()
     Timer.every(1, function()
         local splat_canvas = getNewCanvas(1/4)
         local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
-            splat_canvas = splat_canvas
+            splat_canvas = splat_canvas,
+            on_release_item = function(position) self:releaseCog(position) end
         })
         table.insert(self.splat_canvases, {
             lemon = lemon,
@@ -68,6 +69,12 @@ function InGame:spawnBullet()
         player = self.player
     })
     AudioWorld:emit("playShotSound")
+end
+
+function InGame:releaseCog(position)
+    Concord.entity(self.world):assemble(CogAssembly, {
+        position = position
+    })
 end
 
 function InGame:update(dt)

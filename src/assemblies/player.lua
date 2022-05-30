@@ -90,4 +90,15 @@ return function(entity, options)
             end
         end
     })
+    entity:give("hurtbox", {
+        center = Vector(-5, 7),
+        radius = 7,
+        layer = "cog",
+        on_enter = function(player, cog)
+            cog:destroy()
+            player.health.current = player.health.current + 1
+            player.sprite.current_frame = player.sprite.current_frame - 1
+            -- should we play a sound here maybe?
+        end
+    })
 end

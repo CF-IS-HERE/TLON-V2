@@ -123,6 +123,10 @@ return function(entity, options)
                 lemon.sprite.visible = false
                 Camera.shake(2, 0.3)
                 AudioWorld:emit("playEnemyDeathSound")
+                if lemon.ai_controlled.has_item then
+                    local position = {x=lemon.position.x + 12, y=lemon.position.y + 12}
+                    options.on_release_item(position)
+                end
             end
             bullet:destroy()
         end
