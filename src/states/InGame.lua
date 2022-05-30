@@ -1,4 +1,5 @@
 local InGame = {}
+local score_font = love.graphics.newFont("assets/fonts/nokia.ttf", 30)
 
 function InGame:init()
     self.world = Concord.world()
@@ -24,6 +25,15 @@ function InGame:init()
         on_shoot = function() self:spawnBullet(self) end
     })
 
+    self.score_text = Concord.entity(self.world)
+        :give("label", {
+            font = score_font,
+            color = {r=240/255, g=240/255, b=230/255, a=1},
+            text = Score
+        })
+        :give("layer", Canvas.ui_overlay)
+        :give("position", 16, 8)
+
     self.splat_canvases = {} -- list of canvases that never get cleared so that the particles can have a splat effect
     Timer.every(1, function()
         local splat_canvas = getNewCanvas(1/4)
@@ -31,6 +41,7 @@ function InGame:init()
             splat_canvas = splat_canvas,
             on_destroy = function(lemon)
                 self:spawnScore({x=lemon.position.x-6, y=lemon.position.y})
+                self:increaseScore(100)
                 if lemon.ai_controlled.has_item then
                     local position = {x=lemon.position.x + 12, y=lemon.position.y + 12}
                     self:releaseCog(position)
@@ -54,6 +65,11 @@ function InGame:init()
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -5, -5)
+end
+
+function InGame:increaseScore(amount)
+    Score = Score + amount
+    self.score_text.label.text = tostring(Score)
 end
 
 function InGame:cleanupSplats()

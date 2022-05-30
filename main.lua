@@ -25,6 +25,7 @@ ViewArea = { width = 800, height = 600 }
 ViewPort = { width = 800, height = 600, left = 0, top = 0, right = 0, bottom = 0}
 DisplayScale = 1
 PixelRatio = 4 -- we're working with a 200x150px canvas to work with
+Score = 0
 
 function getNewCanvas(ratio)
     ratio = ratio or 1
