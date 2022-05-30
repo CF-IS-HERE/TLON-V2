@@ -5,12 +5,14 @@ function InGame:init()
     self.world:addSystems(
         Systems.SpriteSystem,
         Systems.PlayerControlSystem,
+        Systems.ScoreTextSystem,
         Systems.AiControlSystem,
         Systems.CollisionSystem,
         Systems.WeaponSystem,
         Systems.BulletControlSystem,
         Systems.OutOfScreenDespawnSystem,
-        Systems.ParticleSystem)
+        Systems.ParticleSystem,
+        Systems.UILabelSystem)
 
     Concord.entity(self.world)
         :give("sprite", {image = love.graphics.newImage('assets/images/game_background.png')})
@@ -27,7 +29,13 @@ function InGame:init()
         local splat_canvas = getNewCanvas(1/4)
         local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
             splat_canvas = splat_canvas,
-            on_release_item = function(position) self:releaseCog(position) end
+            on_destroy = function(lemon)
+                self:spawnScore({x=lemon.position.x-6, y=lemon.position.y})
+                if lemon.ai_controlled.has_item then
+                    local position = {x=lemon.position.x + 12, y=lemon.position.y + 12}
+                    self:releaseCog(position)
+                end
+            end
         })
         table.insert(self.splat_canvases, {
             lemon = lemon,
@@ -69,6 +77,13 @@ function InGame:spawnBullet()
         player = self.player
     })
     AudioWorld:emit("playShotSound")
+end
+
+function InGame:spawnScore(position)
+    Concord.entity(self.world):assemble(ScoreAssembly, {
+        position = position,
+        text = "100"
+    })
 end
 
 function InGame:releaseCog(position)

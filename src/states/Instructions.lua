@@ -27,7 +27,7 @@ function Instructions:init()
     Concord.entity(self.world)
         :give("label", {
             font = love.graphics.newFont("assets/fonts/nokia.ttf", 30),
-            color = "#e7d5b3",
+            color = {r=231/255, g=213/255, b=179/255, a=1},
             text = "Instructions"
         })
         :give("layer", Canvas.ui_overlay)
@@ -119,7 +119,7 @@ function Instructions:init()
         :give("layer", Canvas.ui_overlay)
         :give("scale", 3)
         :give("position")
-        :give("follow_cursor", -5, -5)
+        :give("follow_cursor", -1, -1)
 
     self.updateButtonStates(self)
 end

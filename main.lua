@@ -53,6 +53,7 @@ function love.load()
     LemonAssembly = require "src/assemblies/lemon"
     BulletAssembly = require "src/assemblies/bullet"
     CogAssembly = require("src/assemblies/cog")
+    ScoreAssembly = require("src/assemblies/score")
 
     love.mouse.setVisible(false)
     AudioWorld = Concord.world():addSystems(Systems.GameAudioSystem)

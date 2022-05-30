@@ -32,7 +32,7 @@ function Score:init()
     self.score_text = Concord.entity(self.world)
         :give("label", {
             font = self.font,
-            color = "#e7d5b3",
+            color = {r=231/255, g=213/255, b=179/255, a=1},
             text = self.score_text,
             border = true
         })

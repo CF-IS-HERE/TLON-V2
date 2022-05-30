@@ -8,8 +8,7 @@ function UILabelSystem:draw()
         -- store previous values so that we can re-set them after printing our label
         local _r,_g,_b,_a = love.graphics.getColor()
         local _f = love.graphics.getFont()
-        local r,g,b = ColorUtils.hex2rgb(e.label.color)
-        love.graphics.setColor(r, g, b, 1)
+        love.graphics.setColor(e.label.color.r, e.label.color.g, e.label.color.b, e.label.color.a)
         love.graphics.setFont(e.label.font)
         if e.label.border then
             love.graphics.setLineWidth(4)
