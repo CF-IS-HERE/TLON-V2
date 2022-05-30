@@ -94,7 +94,7 @@ function InGame:draw()
     love.graphics.setCanvas()
 
     -- start drawing canvases in order
-    love.graphics.draw(Canvas.game_background, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.game_background, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
     -- love.graphics.draw(Canvas.game_background, viewportLeft + shakeX * displayScale, viewportTop + shakeY * displayScale, 0, displayScale, displayScale)
 
     -- draw the splats on the ground next
@@ -104,15 +104,15 @@ function InGame:draw()
     for _, c in ipairs(self.splat_canvases) do
         if c.lemon.layer.color.a > 0 then
             love.graphics.setColor(1, 1, 1, c.lemon.layer.color.a)
-            love.graphics.draw(c.canvas, 0, 0, 0, 4, 4)
+            love.graphics.draw(c.canvas, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
         end
     end
     love.graphics.setColor(r,g,b,a)
 
-    love.graphics.draw(Canvas.ground_particles, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
-    love.graphics.draw(Canvas.game_entities, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
-    love.graphics.draw(Canvas.sky_particles, viewportLeft, viewportTop, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
-    love.graphics.draw(Canvas.ui_overlay, viewportLeft , viewportTop, 0, DisplayScale, DisplayScale)
+    love.graphics.draw(Canvas.ground_particles, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.game_entities, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.sky_particles, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
+    love.graphics.draw(Canvas.ui_overlay, ViewPort.left , ViewPort.top, 0, DisplayScale, DisplayScale)
 
 end
 
