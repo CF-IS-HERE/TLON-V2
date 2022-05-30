@@ -4,13 +4,13 @@ local ParticleSystem = Concord.system({
 
 local spawns = {
 	point = function(x, y, data)
-       return Vector(x, y) 
+       return Vector(x, y)
     end,
 	circle = function(x, y, data)
         local position = Vector(love.math.random(0, data), 0):rotated(love.math.random(0, 2 * math.pi))
         position.x = position.x + x
         position.y = position.y + y
-        return position    
+        return position
     end,
 	square = function(x, y, data)
         local position = Vector(love.math.random(-data[1], data[1]), love.math.random(-data[2], data[2]))
@@ -32,7 +32,7 @@ local interpolations = {
 function ParticleSystem:update(dt)
     for _, e in ipairs(self.pool) do
         for i, emitter in pairs(e.particles.emitters) do
-            
+
             if not emitter.particles then -- init system
                 emitter.particles = {}
                 emitter.offset = emitter.offset or Vector(0, 0)
@@ -51,7 +51,7 @@ function ParticleSystem:update(dt)
             end
 
             emitter.timer = emitter.timer - dt
-        
+
             -- emit particles as long as the timer hasn't run out
             if emitter.timer < 0 and emitter.ticks ~= 0 then
                 emitter.ticks = emitter.ticks - 1
@@ -79,19 +79,19 @@ function ParticleSystem:update(dt)
                     })
                 end
             end
-            
+
             -- update particles, keep track of those that we need to remove
             for i, p in pairs(emitter.particles) do
                 -- Add velocity to position
                 p.x = p.x + p.velocity.x * dt
                 p.y = p.y + p.velocity.y * dt
-        
+
                 -- Rotate vector by rotation and add force
                 p.velocity = p.velocity + emitter.force * dt
-                
+
                 -- Decrease lifetime
                 p.lifetime = p.lifetime - dt
-        
+
                 -- Kill if lifetime < 0
                 if p.lifetime < 0 then emitter.particles[i] = nil end
             end
@@ -102,18 +102,18 @@ end
 
 local draws = {
     circle = function(particle, width)
-        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * particle.lifetime / particle.lifetime_start)
         love.graphics.circle("fill", particle.x, particle.y, width)
     end,
     circle_glow = function(particle, width)
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.circle("fill", particle.x, particle.y, width)
-        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * particle.lifetime / particle.lifetime_start)
         love.graphics.circle("fill", particle.x, particle.y, width * 1.4)
     end,
     square = function(particle, width)
         local offset = width * 0.5
-        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * 0.6)
+        love.graphics.setColor(particle.color.r, particle.color.g, particle.color.b, particle.color.a * particle.lifetime / particle.lifetime_start)
         love.graphics.rectangle("fill", particle.x - offset, particle.y - offset, width, width)
     end
 }

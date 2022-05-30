@@ -65,6 +65,32 @@ return function(entity, options)
             width = {a=4, b=8},
             lifetime = {a=0.1, b=0.25},
             draw_mode = "circle"
+        },
+        hit = {
+            canvas = Canvas.sky_particles,
+            spawning = true,
+            amount = {a=10, b=15},
+            tick_speed = {a=0.1, b=0.11},
+            spread = 360,
+            speed = {a=20, b=101},
+            rotation = {a=100, b=100},
+            color = lemon_colors[nb],
+            width = {a=.2, b=.5},
+            lifetime = {a=0.5, b=1},
+            draw_mode = "circle"
+        },
+        death = {
+            canvas = Canvas.sky_particles,
+            spawning = true,
+            amount = {a=10, b=12},
+            tick_speed = {a=0.1, b=0.11},
+            spread = 360,
+            speed = {a=20, b=101},
+            rotation = {a=100, b=100},
+            color = {r={a=0.99, b=1}, g={a=0.99, b=1}, b={a=0.99, b=1}, a={a=0.99, b=1}},
+            width = {a=2, b=4},
+            lifetime = {a=1, b=1.5},
+            draw_mode = "circle"
         }
     })
     entity:give("hitbox", {
@@ -78,6 +104,7 @@ return function(entity, options)
                 lemon.health.current = lemon.health.current - 1
                 lemon.health.invincible = true
                 lemon.sprite.flash_intensity = 0.7
+                lemon.particles.emitters.hit.ticks = 1
                 Timer.after(0.1, function()
                     lemon.health.invincible = false
                 end)
@@ -90,6 +117,7 @@ return function(entity, options)
                 lemon.particles.emitters.explode.ticks = 1
                 lemon.particles.emitters.explode.offset = {x = lemon.knockback.x * -1, y = lemon.knockback.y * -1}
                 lemon.particles.emitters.explode.rotation = {a=knockback_angle, b=knockback_angle}
+                lemon.particles.emitters.death.ticks = 1
                 -- only destroy the entity after the splat is destroyed
                 lemon.active = false
                 lemon.sprite.visible = false
