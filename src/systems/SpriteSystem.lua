@@ -38,7 +38,7 @@ function SpriteSystem:draw()
                 local frame_quad = love.graphics.newQuad(qx, qy, qw, qh, e.sprite.image:getDimensions())
                 love.graphics.draw(e.sprite.image, frame_quad, ex, ey, e.sprite.rotation, sx, sy, e.sprite.offset.x, e.sprite.offset.y)
             else
-                love.graphics.draw(e.sprite.image, ex, ey, e.sprite.rotation, sx, sy)
+                love.graphics.draw(e.sprite.image, ex, ey, e.sprite.rotation, sx, sy, e.sprite.offset.x, e.sprite.offset.y)
             end
             love.graphics.setShader()
             love.graphics.setColor(r,g,b,a)

@@ -22,7 +22,10 @@ function InGame:init()
         :give("layer", Canvas.game_background)
 
     self.player = Concord.entity(self.world):assemble(PlayerAssembly, {
-        on_shoot = function() self:spawnBullet(self) end
+        on_shoot = function()
+            self:spawnBullet(self)
+            self.cursor.rotation.ticks = 1
+        end
     })
 
     self.score_text = Concord.entity(self.world)
@@ -57,14 +60,27 @@ function InGame:init()
     self.overlay = Concord.world()
     self.overlay:addSystems(
         Systems.MouseCursorSystem,
-        Systems.SpriteSystem
+        Systems.SpriteSystem,
+        Systems.RotatingSpriteSystem
     )
     Concord.entity(self.overlay)
-        :give("sprite", {image = love.graphics.newImage("assets/images/mouse/target.png")})
+        :give("sprite", {image = love.graphics.newImage("assets/images/mouse/mouseMiddle.png")})
         :give("layer", Canvas.ui_overlay)
         :give("scale", 3)
         :give("position")
-        :give("follow_cursor", -5, -5)
+        :give("follow_cursor")
+    self.cursor = Concord.entity(self.overlay)
+        :give("sprite", {
+            image = love.graphics.newImage("assets/images/mouse/mouseOuter.png"),
+            offset = Vector(6, 6)
+        })
+        :give("layer", Canvas.ui_overlay)
+        :give("scale", 3)
+        :give("position")
+        :give("rotation", {
+            speed = 10
+        })
+        :give("follow_cursor", 12, 12)
 end
 
 function InGame:increaseScore(amount)
