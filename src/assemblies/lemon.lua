@@ -1,14 +1,10 @@
 local images = {}
-<<<<<<< HEAD
-require("src/states/InGame")
-=======
 
 local lemon_colors = {
 	{r={a=232/255,b=232/255}, g={a=193/255,b=193/255}, b={a=112/255,b=112/255}, a={a=1,b=1}}, -- orange
 	{r={a=208/255,b=208/255}, g={a=218/255,b=218/255}, b={a=145/255,b=145/255}, a={a=1,b=1}}, -- green
 	{r={a=223/255,b=223/255}, g={a=132/255,b=132/255}, b={a=165/255,b=165/255}, a={a=1,b=1}}  -- purple
 }
->>>>>>> 08c90de1a20b06f97c0c63e17717b7eb1fe68e79
 
 for i=1,3 do
     local filename = "lemon"..i..".png"
@@ -127,11 +123,7 @@ return function(entity, options)
                 lemon.sprite.visible = false
                 Camera.shake(2, 0.3)
                 AudioWorld:emit("playEnemyDeathSound")
-<<<<<<< HEAD
-                updateeCount()
-=======
                 options.on_destroy(lemon)
->>>>>>> 08c90de1a20b06f97c0c63e17717b7eb1fe68e79
             end
             bullet:destroy()
         end

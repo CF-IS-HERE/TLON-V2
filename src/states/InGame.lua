@@ -4,6 +4,7 @@ local score_font = love.graphics.newFont("assets/fonts/nokia.ttf", 30)
 local wave = 1
 local eCount = 0
 local spawnCount = 4
+local sCount = 0
 
 function InGame:init()
     self.world = Concord.world()
@@ -32,9 +33,6 @@ function InGame:init()
         end
     })
 
-<<<<<<< HEAD
-    Timer.every(1, function() self:startWaveCheck() end)
-=======
     self.score_text = Concord.entity(self.world)
         :give("label", {
             font = score_font,
@@ -45,6 +43,20 @@ function InGame:init()
         :give("position", 16, 8)
 
     self.splat_canvases = {} -- list of canvases that never get cleared so that the particles can have a splat effect
+    Timer.every(1, function()
+        if sCount < spawnCount then
+            self:spawnLemon()
+        elseif eCount == 0 then
+            Timer.after(5, self:updateWave())
+        end
+    end)
+
+    Timer.every(5, function()
+        print("5 Second eCount: "..eCount)
+        print("5 Second sCount: "..sCount)
+    end)
+
+    --[[
     Timer.every(1, function()
         local splat_canvas = getNewCanvas(1/4)
         local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
@@ -63,7 +75,7 @@ function InGame:init()
             canvas = splat_canvas
         })
     end)
->>>>>>> 08c90de1a20b06f97c0c63e17717b7eb1fe68e79
+    ]]
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -105,30 +117,33 @@ function InGame:cleanupSplats()
     ArrayUtils.compact(self.splat_canvases)
 end
 
-function updateeCount()
-    print("Update eCount Ran")
-    eCount = eCount - 1
-end
-
-function InGame:startWaveCheck()
-    if eCount < spawnCount then
-        self:spawnLemon()
-    elseif eCount == 0 then
-        Timer.after(5, self:updateWave())
-    end
-end
-
 function InGame:updateWave()
     wave = wave + 1
-    spawnCount = 2 + ((wave * 2) / 2)
-    print("Wave Updated, New wave is: ".. wave .. "New spawnCount is: ".. spawnCount)
+    spawnCount = 4 + (wave * 2)
+    print("Wave Updated, New wave is: ".. wave .. " New spawnCount is: ".. spawnCount)
 end
 
 function InGame:spawnLemon()
-    self.lemon = Concord.entity(self.world):assemble(LemonAssembly, {
-        canvas = self.scaled_canvas
+    local splat_canvas = getNewCanvas(1/4)
+    local lemon = Concord.entity(self.world):assemble(LemonAssembly, {
+        splat_canvas = splat_canvas,
+        on_destroy = function(lemon)
+            self:spawnScore({x=lemon.position.x-6, y=lemon.position.y})
+            self:increaseScore(100)
+            if lemon.ai_controlled.has_item then
+                local position = {x=lemon.position.x + 12, y=lemon.position.y + 12}
+                self:releaseCog(position)
+            end
+            eCount = eCount - 1
+        end
     })
+    table.insert(self.splat_canvases, {
+        lemon = lemon,
+        canvas = splat_canvas
+    })
+
     eCount = eCount + 1
+    sCount = sCount + 1
     print("eCount: "..eCount)
     print("spawnCount: "..spawnCount)
     print("Lemon Spawned")
