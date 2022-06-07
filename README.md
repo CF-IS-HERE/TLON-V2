@@ -2,12 +2,12 @@
 Under CC BY-NC-ND 4.0
 ---
 
-**Project Timeline**
-By 2022
-- Game releases
+**Project Timeline**<br />
+- Game releases By 2022
 
-Jun 5th 2022
-- Aim to get code rework complete 
+Jun 5th 2022<br />
+~~Aim to get code rework complete~~ <br />
+- Very close to finish, Gad to adjust and match the previous UI/Game mechanics, Matthew to implement enemy waves. New Music has started. 2.5 weeks off the original estimation. Need to work out another completion date for recoding when everyone is around.
 
 May 26th 2022 (1st milestone)<br />
 ~~- Started code rework and optimising (ditching 70%)~~<br />

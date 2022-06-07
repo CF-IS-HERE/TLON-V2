@@ -1,5 +1,5 @@
 local UIKeyImageSystem = Concord.system({
-    pool = {"image_key", "position", "scale"}
+    pool = {"image_key", "position", "scale", "layer"}
 })
 
 function UIKeyImageSystem:init(world)
@@ -9,6 +9,7 @@ end
 
 function UIKeyImageSystem:draw()
     for _, e in ipairs(self.pool) do
+        love.graphics.setCanvas(e.layer.canvas)
         if love.keyboard.isDown(e.image_key.key) then
             love.graphics.draw(e.image_key.image_active, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
             if not e.active then
@@ -22,6 +23,7 @@ function UIKeyImageSystem:draw()
             e.active = false
             love.graphics.draw(e.image_key.image_idle, e.position.x, e.position.y, nil, e.scale.x, e.scale.y)
         end
+        love.graphics.setCanvas()
     end
 end
 

@@ -1,6 +1,6 @@
 return {
-    lerp = function(a, b, c)
-        return a + (b - a) * c
+    lerp = function(start, finish, percent)
+        return start + (finish - start) * percent
     end,
 
     clamp = function(n, min, max)
@@ -10,6 +10,10 @@ return {
     end,
 
     deg2rad = function(rad)
-        return rad / 180 * 3.14
+        return rad / 180 * math.pi
+    end,
+
+    round = function(x)
+        return math.floor(x + 0.5)
     end
 }

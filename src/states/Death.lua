@@ -10,10 +10,6 @@ function Death:enter()
 end
 
 function Death:init()
-    local animation_img = love.graphics.newImage('assets/images/deathscreen/death_animation.png')
-    local animation_img_scale_x = love.graphics.getWidth() / animation_img:getWidth()
-    local animation_img_scale_y = love.graphics.getHeight() / animation_img:getHeight()
-    
     self.world = Concord.world()
     self.world:addSystems(Systems.AnimatedSpriteSystem)
     self.death_animation = Concord.entity(self.world)
@@ -25,9 +21,9 @@ function Death:init()
                 Gamestate.switch(State.Score)
             end
         })
-        :give("sprite", {image = animation_img})
+        :give("sprite", {image = love.graphics.newImage('assets/images/deathscreen/death_animation.png')})
         :give("position")
-        :give("scale", animation_img_scale_x * 15, animation_img_scale_y)
+        :give("layer", Canvas.ui)
 end
 
 function Death:update(dt)
@@ -35,10 +31,10 @@ function Death:update(dt)
 end
 
 function Death:draw()
-    local r,g,b,a = love.graphics.getColor()
-    love.graphics.setColor(16/255, 20/255, 31/255, 1)
-    love.graphics.rectangle("fill", 0, 0, 800, 600)
-    love.graphics.setColor(r,g,b,a)
+    love.graphics.setCanvas(Canvas.ui)
+    love.graphics.clear(16/255, 20/255, 31/255, 1)
+    love.graphics.setCanvas()
     self.world:emit("draw")
+    love.graphics.draw(Canvas.ui, ViewPort.left, ViewPort.top, 0, DisplayScale * PixelRatio, DisplayScale * PixelRatio)
 end
 return Death

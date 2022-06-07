@@ -1,14 +1,14 @@
 local UILabelSystem = Concord.system({
-    pool = {"label", "position"}
+    pool = {"label", "position", "layer"}
 })
 
 function UILabelSystem:draw()
     for _, e in ipairs(self.pool) do
+        love.graphics.setCanvas(e.layer.canvas)
         -- store previous values so that we can re-set them after printing our label
         local _r,_g,_b,_a = love.graphics.getColor()
         local _f = love.graphics.getFont()
-        local r,g,b = ColorUtils.hex2rgb(e.label.color)
-        love.graphics.setColor(r, g, b, 1)
+        love.graphics.setColor(e.label.color.r, e.label.color.g, e.label.color.b, e.label.color.a)
         love.graphics.setFont(e.label.font)
         if e.label.border then
             love.graphics.setLineWidth(4)
@@ -26,6 +26,7 @@ function UILabelSystem:draw()
         love.graphics.print(e.label.text, e.position.x, e.position.y)
         love.graphics.setColor(_r,_g,_b,_a)
         love.graphics.setFont(_f)
+        love.graphics.setCanvas()
     end
 end
 
