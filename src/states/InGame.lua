@@ -1,5 +1,9 @@
 local InGame = {}
 
+local wave = 1
+local eCount = 0
+local spawnCount = 4
+
 function InGame:init()
     self.scaled_canvas = love.graphics.newCanvas(200, 150)
     self.world = Concord.world()
@@ -25,11 +29,7 @@ function InGame:init()
         on_shoot = function() self:spawnBullet(self) end
     })
 
-    Timer.every(1, function() 
-        Concord.entity(self.world):assemble(LemonAssembly, {
-            canvas = self.scaled_canvas
-        })
-    end)
+    Timer.every(1, function() self:startWaveCheck() end)
 
     self.overlay = Concord.world()
     self.overlay:addSystems(
@@ -41,6 +41,35 @@ function InGame:init()
         :give("scale", 3)
         :give("position")
         :give("follow_cursor", -5, -5)
+end
+
+function updateeCount()
+    print("Update eCount Ran")
+    eCount = eCount - 1
+end
+
+function InGame:startWaveCheck()
+    if eCount < spawnCount then
+        self:spawnLemon()
+    elseif eCount == 0 then
+        Timer.after(5, self:updateWave())
+    end
+end
+
+function InGame:updateWave()
+    wave = wave + 1
+    spawnCount = 2 + ((wave * 2) / 2)
+    print("Wave Updated, New wave is: ".. wave .. "New spawnCount is: ".. spawnCount)
+end
+
+function InGame:spawnLemon()
+    self.lemon = Concord.entity(self.world):assemble(LemonAssembly, {
+        canvas = self.scaled_canvas
+    })
+    eCount = eCount + 1
+    print("eCount: "..eCount)
+    print("spawnCount: "..spawnCount)
+    print("Lemon Spawned")
 end
 
 function InGame:enter()
@@ -62,7 +91,7 @@ function InGame:update(dt)
     if love.keyboard.isDown("escape") then
         AudioWorld:emit("sysCleanUp")
         Gamestate.push(State.Pause)
-    end  
+    end
 end
 
 function InGame:draw()
@@ -75,6 +104,10 @@ function InGame:draw()
     love.graphics.setCanvas()
     love.graphics.draw(self.scaled_canvas, 0, 0, 0, 4, 4)
     self.overlay:emit("draw")
+end
+
+function InGame:waveMessage()
+    print("Next Wave Starting...")
 end
 
 return InGame

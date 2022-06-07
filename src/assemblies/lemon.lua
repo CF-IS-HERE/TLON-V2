@@ -1,4 +1,6 @@
 local images = {}
+require("src/states/InGame")
+
 for i=1,3 do
     local filename = "lemon"..i..".png"
     images[i] = love.graphics.newImage("assets/images/"..filename)
@@ -58,6 +60,7 @@ return function(entity, options)
             else
                 lemon:destroy()
                 AudioWorld:emit("playEnemyDeathSound")
+                updateeCount()
             end
             bullet:destroy()
         end
